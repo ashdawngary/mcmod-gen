@@ -1,0 +1,4 @@
+%%hungercheck.txt%%
+%%lookwestapprox.txt%%
+%%west.scanrow.high.txt%%
+%%hungercheck.txt%%

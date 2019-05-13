@@ -1,0 +1,43 @@
+//Checks if pickaxe is ready to kill
+key(attack)
+if(@picklevelup == 1)
+	if(%INVSLOT% == 9)
+		log("&4&lOh No!  We have run out of Pickaxes that are not &4&lleveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+		SET(@stall_flag)
+	else
+		do
+			INVENTORYUP(1)
+			log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+			UNSET(@picklevelup)
+			key(attack)
+			wait(20ms)
+			ifmatches("%ITEMNAME%","Pickaxe")
+				key(attack)
+			else
+				SET(@picklevelup)
+			endif
+		while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+		
+		if((%INVSLOT% == 9) && (@picklevelup == 1 ))
+			log("&4&lOh No!  We have run out of Pickaxes that are not leveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+			SET(@stall_flag)
+		endif
+	endif
+else
+	ifmatches("%ITEMNAME%","Pickaxe")
+		key(attack)
+	else
+		do
+			INVENTORYUP(1)
+			log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+			UNSET(@picklevelup)
+			key(attack)
+			wait(20ms)
+			ifmatches("%ITEMNAME%","Pickaxe")
+				key(attack)
+			else
+				SET(@picklevelup)
+			endif
+		while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+	endif
+endif

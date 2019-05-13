@@ -1,0 +1,60 @@
+looks(60,0)
+// 50 - 140 = 90 / 2 = 18
+do
+	looks(60,0)
+	#iter = 5
+	for(#k,0,5)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(+5,+0)
+	next
+	if(@antiafk)
+		look(90,0)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		keydown(forward)
+		wait(1000ms)
+		keyup(forward)
+		keydown(back)
+		wait(300ms)
+		keyup(back)
+			      log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+	looks(+0,-17)
+	#iter = 5
+	for(#k,0,5)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "stained_hardened_clay")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(-5,+0)
+	next
+	if(@antiafk)
+		look(90,0)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		keydown(forward)
+		wait(1000ms)
+		keyup(forward)
+		keydown(back)
+		wait(300ms)
+		keyup(back)
+			      log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+while(true)

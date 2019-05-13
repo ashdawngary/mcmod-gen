@@ -1,0 +1,4 @@
+for(#k,0,11)
+	%%breakblock.txt%%
+	looks(-5,+0)
+next

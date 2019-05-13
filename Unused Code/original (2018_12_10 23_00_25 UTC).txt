@@ -1,0 +1,101 @@
+do
+wait(200ms)
+//log("Phase 1")
+look(-20,0)
+
+do
+
+key(attack)
+wait(5ms)
+
+while(HITID != "stone")
+key(attack)
+if(HITID != "stone")
+log("We missed.  Making adjustments.")
+do
+
+key(attack)
+wait(5ms)
+
+while(HITID != "stone")
+
+endif
+
+
+
+//log("%HITID%")
+
+wait(200ms)
+//log("Phase 2")
+look(-10,-20)
+do
+
+key(attack)
+wait(5ms)
+while(HITID != "stone")
+
+key(attack)
+if(HITID != "stone")
+log("We missed.  Making adjustments.")
+do
+
+key(attack)
+wait(5ms)
+
+while(HITID != "stone")
+
+endif
+
+
+
+
+
+
+
+wait(200ms)
+look(20,0)
+
+do
+
+    key(attack)
+    wait(5ms)
+while(HITID != "stone" )
+
+key(attack)
+if(HITID != "stone")
+    log("We missed.  Making adjustments.")
+    do
+
+    key(attack)
+    wait(5ms)
+
+    while(HITID != "stone")
+
+endif
+
+
+
+
+
+wait(200ms)
+look(24,-20)
+
+do
+
+    key(attack)
+    wait(10ms)
+
+while(HITID != "stone")
+key(attack)
+    if(HITID != "stone")
+    log("We missed.  Making adjustments.")
+    do
+
+    key(attack)
+    wait(5ms)
+
+    while(HITID != "stone")
+
+    endif
+
+while(1)

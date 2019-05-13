@@ -1,0 +1,59 @@
+looks(50,0)
+// 50 - 140 = 90 / 2 = 18
+do
+	looks(50,0)
+	#iter = 18
+	for(#iter,0,18)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(+5,+0)
+	next
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		looks(270,%PITCH%)
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+	looks(+0,-17)
+	for(#iter,0,18)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(-5,+0)
+	next
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		looks(270,%PITCH%)
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+while(true)

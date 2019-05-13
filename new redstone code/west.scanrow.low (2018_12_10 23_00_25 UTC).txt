@@ -1,0 +1,6 @@
+%%reset.txt%%
+do
+	%%moveright.txt%%
+	%%breakblock.txt%%
+	wait(100ms)
+while(ZPOS  >  -263)

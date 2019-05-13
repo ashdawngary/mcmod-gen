@@ -1,0 +1,15 @@
+log("&dCosmicPrisons &0 Bot &a by Neel &6 with Python")
+log("&9Code was compiled via &6 compiler.py with Python 2.7")
+do
+	looks(225,5)
+	keydown(sneak);
+	%%scanrow.txt%%
+
+	%%antiafk.txt%%
+
+	looks(315,-20)
+	%%scanrowrev.txt%%	
+	
+	%%antiafk.txt%%
+
+while(1)

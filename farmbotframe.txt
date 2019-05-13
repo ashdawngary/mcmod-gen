@@ -1,0 +1,22 @@
+log("intialize frame")
+pick("nether_wart")
+
+do
+	log("going right")
+	%%farmRight.txt%%
+	if(%%XPOS%% == 17023)
+		%%reposition.txt%%
+	else
+		%%walkDown.txt%%
+		%%checkblock.txt%%	
+	endif
+	log("going left")
+	%%farmLeft.txt%%
+	if(%%XPOS%% == 17023)
+		%%reposition.txt%%
+	else
+		%%walkDown.txt%%
+		%%checkblock.txt%%
+	endif
+	
+while(1)

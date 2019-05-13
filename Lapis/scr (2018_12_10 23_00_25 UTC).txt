@@ -1,0 +1,13 @@
+for(#iter,0,18)
+	do
+		key(attack)
+	while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE"))
+	key(attack)
+	if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE"))
+		do
+			   key(attack)
+			   wait(5ms)
+		while((%HITID% != "stone") && (%HITID% != "air") &&(%HIT% == "TILE"))
+	endif
+	looks(-5,+0)
+next

@@ -1,0 +1,87 @@
+log("&dCosmicPrisons &0 Bot &a by Neel &6 with Python")
+log("&9Code was compiled via &6 compiler.py with Python 2.7")
+log("&9Version:&r&1&l&nLapis Lazuli Levels 30-70")
+do
+	looks(225,5)
+	#intensity = 20
+	keydown(sneak);
+	for(#iter,0,#intensity)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			endif
+		endif
+		wait(20ms)
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		look(+5,+0)
+	next
+
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+
+	looks(315,-20)
+	#intensity = 20
+	for(#iter,0,#intensity)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			endif
+		endif
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		wait(20ms)	
+		looks(-5,+0)
+	next
+	
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+
+	looks(225,-35)
+	#intesity = 16
+	for(#iter,0,#intensity)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") )
+			endif
+		endif
+		wait(20ms)
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		look(+5,+0)
+	next
+
+while(1)

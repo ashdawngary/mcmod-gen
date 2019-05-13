@@ -1,0 +1,12 @@
+//Look function: Remember to set intensity to #target!
+do
+    if(@k)
+        looks(-10,0)
+    endif
+    if(@p)
+        looks(+10,0)
+    endif
+    #t = %YAW% - #target
+    @p = (%YAW% - #target) < 10 
+    @k = (%YAW% - #target) > -10 )
+while(@p != @k)

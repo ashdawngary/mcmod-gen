@@ -1,0 +1,11 @@
+if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+	do
+		key(attack)
+	while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+	key(attack)
+	if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+		do
+			key(attack)			
+		while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+	endif
+endif

@@ -1,0 +1,3 @@
+keydown(right)
+wait(50ms)
+keyup(right)

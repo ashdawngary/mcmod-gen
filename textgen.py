@@ -1,0 +1,27 @@
+##Minecraft Colored Text Generator
+
+c =raw_input("Text:")
+c = c.replace("[dark_red]","&4")
+c = c.replace("[red]","&c")
+c = c.replace("[gold]","&6")
+c = c.replace("[yellow]","&e")
+c = c.replace("[dark_green]","&2")
+c = c.replace("[green]","&a")
+c = c.replace("[aqua]","&b")
+c = c.replace("[dark_aqua]","&3")
+
+c = c.replace("[dark_blue]","&1")
+c = c.replace("[blue]","&9")
+c = c.replace("[light_purple]","&d")
+c = c.replace("[dark_purple]","&5")
+c = c.replace("[white]","&f")
+c = c.replace("[gray]","&7")
+c = c.replace("[dark_gray]","&8")
+c = c.replace("[black]","&0")
+c = c.replace("[bold]","&l")
+c = c.replace("[italic]","&o")
+c = c.replace("[underline]","&n")
+c = c.replace("[strike]","&m")
+c = c.replace("[random]","&k")
+c = c.replace("[reset]","&r")
+print c

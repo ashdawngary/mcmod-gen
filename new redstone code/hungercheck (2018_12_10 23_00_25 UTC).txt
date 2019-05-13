@@ -1,0 +1,8 @@
+if((HUNGER < 7))
+    log("true")
+    inventorydown(1)
+    do
+        key(use)
+    while(HUNGER < 7)
+    inventoryup(1)
+endif

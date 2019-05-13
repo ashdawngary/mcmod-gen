@@ -1,0 +1,40 @@
+log("Coal Bot")
+do
+	looks(270,0)
+	if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		do
+			key(attack)
+		while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		key(attack)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)			
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		endif
+	endif
+	looks(310,0)
+	if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		do
+			key(attack)
+		while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		key(attack)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)			
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		endif
+	endif
+	looks(270,-30)
+	if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		do
+			key(attack)
+		while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		key(attack)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)			
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+		endif
+	endif
+	
+while(true)

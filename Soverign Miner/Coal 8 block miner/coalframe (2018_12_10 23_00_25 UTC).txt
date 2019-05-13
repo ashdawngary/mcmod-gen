@@ -1,0 +1,10 @@
+log("Coal Bot")
+do
+	looks(270,0)
+	%%breakblock.txt%%
+	looks(310,0)
+	%%breakblock.txt%%
+	looks(270,-30)
+	%%breakblock.txt%%
+	
+while(true)

@@ -1,0 +1,16 @@
+log("Zeroing Position ..."
+do
+	if(%XPOS% > 16992)
+		keydown(forward)
+	else 
+		keyup(forward)
+	endif
+	if(%ZPOS% < 6335)
+		keydown(left)
+	else
+		keyup(left)
+	endif
+while( (%XPOS% > 16992) || (%ZPOS% < 6335) )
+keyup(forward)
+keyup(left)
+log("Done!")

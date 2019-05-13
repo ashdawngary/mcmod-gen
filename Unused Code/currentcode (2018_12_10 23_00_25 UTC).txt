@@ -1,0 +1,17 @@
+do
+	wait(200ms)
+	look(-20,0)
+	%%breakblock.txt%%
+	
+	wait(200ms)
+	look(-10,-20)
+	%%breakblock.txt%%
+	
+	wait(200ms)
+	look(20,0)
+	%%breakblock.txt%%
+
+	wait(200ms)
+	look(24,-20)
+	%%breakblock.txt%%
+while(1)

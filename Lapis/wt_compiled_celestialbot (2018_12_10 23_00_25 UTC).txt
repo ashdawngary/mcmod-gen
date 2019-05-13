@@ -1,0 +1,280 @@
+log("&dCosmicPrisons &0 Bot &a by Neel &6 with Python")
+log("&9Code was compiled via &6 compiler.py with Python 2.7")
+log("&9Version:&r&1&l&nLapis Lazuli Levels 30-70")
+//Checks if pickaxe is ready to kill
+key(attack)
+if(@picklevelup == 1)
+	if(%INVSLOT% == 9)
+		log("&4&lOh No!  We have run out of Pickaxes that are not &4&lleveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+		SET(@stall_flag)
+	else
+		do
+			INVENTORYUP(1)
+			log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+			UNSET(@picklevelup)
+			key(attack)
+			wait(20ms)
+			ifmatches("%ITEMNAME%","Pickaxe")
+				key(attack)
+			else
+				SET(@picklevelup)
+			endif
+		while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+		
+		if((%INVSLOT% == 9) && (@picklevelup == 1 ))
+			log("&4&lOh No!  We have run out of Pickaxes that are not leveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+			SET(@stall_flag)
+		endif
+	endif
+else
+	ifmatches("%ITEMNAME%","Pickaxe")
+		key(attack)
+	else
+		do
+			INVENTORYUP(1)
+			log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+			UNSET(@picklevelup)
+			key(attack)
+			wait(20ms)
+			ifmatches("%ITEMNAME%","Pickaxe")
+				key(attack)
+			else
+				SET(@picklevelup)
+			endif
+		while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+	endif
+endif
+do
+	looks(225,5)
+	#intensity = 20
+	keydown(sneak);
+	#iter = 0
+	do
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			endif
+		endif
+		wait(20ms)
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		look(+5,+0)
+		INC(#iter,1)
+	while(#iter != #intensity)
+	//Checks if pickaxe is ready to kill
+	key(attack)
+	if(@picklevelup == 1)
+		if(%INVSLOT% == 9)
+			log("&4&lOh No!  We have run out of Pickaxes that are not &4&lleveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+			SET(@stall_flag)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+			
+			if((%INVSLOT% == 9) && (@picklevelup == 1 ))
+				log("&4&lOh No!  We have run out of Pickaxes that are not leveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+				SET(@stall_flag)
+			endif
+		endif
+	else
+		ifmatches("%ITEMNAME%","Pickaxe")
+			key(attack)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+		endif
+	endif
+	
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		looks(270,%PITCH%)
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+
+	looks(315,-20)
+	#intensity = 20
+	#iter = 0
+	do
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			endif
+		endif
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		wait(20ms)	
+		looks(-5,+0)
+		INC(#iter,1)
+	while(#iter != #intensity)
+	//Checks if pickaxe is ready to kill
+	key(attack)
+	if(@picklevelup == 1)
+		if(%INVSLOT% == 9)
+			log("&4&lOh No!  We have run out of Pickaxes that are not &4&lleveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+			SET(@stall_flag)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+			
+			if((%INVSLOT% == 9) && (@picklevelup == 1 ))
+				log("&4&lOh No!  We have run out of Pickaxes that are not leveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+				SET(@stall_flag)
+			endif
+		endif
+	else
+		ifmatches("%ITEMNAME%","Pickaxe")
+			key(attack)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+		endif
+	endif
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		looks(270,%PITCH%)
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+
+	looks(225,-35)
+	#intesity = 16
+	#iter = 0
+	do
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1))
+			endif
+		endif
+		wait(20ms)
+		//log("PITCH: %PITCH%, YAW: %YAW%")
+		look(+5,+0)
+		INC(#iter,1)
+	while(#iter != #intensity)
+	//Checks if pickaxe is ready to kill
+	key(attack)
+	if(@picklevelup == 1)
+		if(%INVSLOT% == 9)
+			log("&4&lOh No!  We have run out of Pickaxes that are not &4&lleveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+			SET(@stall_flag)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+			
+			if((%INVSLOT% == 9) && (@picklevelup == 1 ))
+				log("&4&lOh No!  We have run out of Pickaxes that are not leveled up.  Initiating stall mode.  We are also &6&nDisabling Chat!")
+				SET(@stall_flag)
+			endif
+		endif
+	else
+		ifmatches("%ITEMNAME%","Pickaxe")
+			key(attack)
+		else
+			do
+				INVENTORYUP(1)
+				log("&aWe have filled up another Pickaxe!  Switching to Inventory Slot &l&6%INVSLOT%&r&a.")
+				UNSET(@picklevelup)
+				key(attack)
+				wait(20ms)
+				ifmatches("%ITEMNAME%","Pickaxe")
+					key(attack)
+				else
+					SET(@picklevelup)
+				endif
+			while((@picklevelup == 1 ) && (%INVSLOT% != 9))
+		endif
+	endif
+	if(@antiafk)
+		log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+		looks(270,%PITCH%)
+		keydown(right)
+			      wait(500ms)
+			      keyup(right)
+			      keydown(left)
+			      wait(500ms)
+			      keyup(left)
+		log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+		UNSET(@antiafk)
+	endif
+	do
+	
+	while(@stall_flag == 1)
+while(1)

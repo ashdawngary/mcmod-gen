@@ -1,0 +1,7 @@
+#initial = %ZPOS%
+keydown(LEFT)
+do
+
+while(%ZPOS% == #initial)
+
+keyup(LEFT)

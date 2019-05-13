@@ -1,0 +1,6 @@
+looks(270,0,500ms)
+look(+0,-15)
+do
+	%%moveleft.txt%%
+	%%breakblock.txt%%
+while(ZPOS < -249)

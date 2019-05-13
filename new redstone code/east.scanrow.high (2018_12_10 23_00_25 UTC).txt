@@ -1,0 +1,16 @@
+do
+	%%moveright.txt%%
+	%%breakblock.txt%%
+	#c = HITY
+	getid(%HITX%,%#c%,%HITZ%,&p)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&q)
+	if((&p == "redstone_ore"))
+		%%breakblock.txt%%	
+	endif
+	if((&q == "redstone_ore"))
+		look(+0,-15)	
+		%%breakblock.txt%%
+		look(+0,+15)
+	endif
+while(ZPOS < -249)

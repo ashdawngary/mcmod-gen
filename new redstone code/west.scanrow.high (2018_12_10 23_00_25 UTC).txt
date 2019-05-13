@@ -1,0 +1,42 @@
+looks(270,0,500ms)
+looks(+0,-15)
+key(attack)
+looks(+0,+15)
+do
+	%%moveleft.txt%%
+	#c = HITY
+	DEC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&m1)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p0)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p1)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p2)
+	if((&m1 == "redstone_ore"))
+		wait(50ms)
+		look(+0,+25)
+		%%breakblock.txt%%
+		look(+0,-25)
+	endif	
+	if((&p0 == "redstone_ore"))
+		%%breakblock.txt%%	
+	
+	endif
+	if((&p1 == "redstone_ore"))
+		wait(100ms)
+		look(+0,-15)
+		wait(100ms)	
+		%%breakblock.txt%%
+		wait(100ms)
+		look(+0,+15)
+	endif
+	if((p2 == "redstone_ore"))
+	 	wait(100ms)
+        	look(+0,-35)
+        	wait(100ms)
+		%%breakblock.txt%%
+		wait(300ms)
+        	look(+0,+35)
+	endif
+while(ZPOS  <  -249)

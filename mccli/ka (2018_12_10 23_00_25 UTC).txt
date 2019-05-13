@@ -1,0 +1,9 @@
+pick("Iron Sword")
+if(%HEALTH%  < 15)
+	key(attack)
+	key(use)
+else
+	key(attack)
+	
+endif
+sleep(50)

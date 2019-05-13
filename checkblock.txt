@@ -1,0 +1,6 @@
+do
+	key(attack)
+while(%HITNAME% == "Nether Wart")
+do
+	key(use)
+while(%HITNAME% == "Soul Sand")

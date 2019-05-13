@@ -1,0 +1,11 @@
+do
+	if(GETSLOT("skull:3") != -1)	
+		pick("skull:3")
+		key(use)
+	endif
+	if(@#kill ==0)
+		%%ka.txt%%		
+	else
+		%%loadbow.txt%%
+	endif
+while(1)

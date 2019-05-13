@@ -1,0 +1,5 @@
+do
+	%%eastmovement.txt%%
+	%%westmovement.txt%%
+
+while(true)

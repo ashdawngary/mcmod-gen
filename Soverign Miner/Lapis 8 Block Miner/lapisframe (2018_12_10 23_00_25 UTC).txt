@@ -1,0 +1,26 @@
+// Yo its ya boi Neel with the Lapis 8-block miner
+// #writecode #AshX101OPOP
+do
+	looks(115,0)
+	#iter = 21
+	%%scanrow.txt%%
+	%%antiafk.txt%%
+	looks(205,0)
+	looks(+0,-17)
+	#iter = 17
+	%%scanrowrev.txt%%
+	%%antiafk.txt%%
+	looks(118,0)
+	looks(+0,-27)
+	#iter = 6
+	%%scanrow.txt%%
+	%%antiafk.txt%%
+	wait(100ms)
+	looks(195,0)
+	wait(40ms)
+	looks(+0,-50)
+	wait(100ms)
+	%%breakblock.txt%%
+	%%antiafk.txt%%
+
+while(true)

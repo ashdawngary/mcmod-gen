@@ -1,0 +1,37 @@
+looks(50,0)
+// 50 - 140 = 90 / 2 = 18
+do
+	looks(230,20)
+	#iter = 22
+	for(#iter,0,18)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(+5,+0)
+	next
+
+	looks(340,0)
+	for(#iter,0,18)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1) && (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "wool") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "sea_lantern")&& (%HITID% != "stained_glass"))
+			endif
+		endif
+		looks(-5,+0)
+	next
+
+while(true)

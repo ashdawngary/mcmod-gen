@@ -1,0 +1,8 @@
+#iter = 0
+do
+	%%breakblock.txt%%
+	wait(20ms)
+	//log("PITCH: %PITCH%, YAW: %YAW%")
+	look(+5,+0)
+	INC(#iter,1)
+while(#iter != #intensity)

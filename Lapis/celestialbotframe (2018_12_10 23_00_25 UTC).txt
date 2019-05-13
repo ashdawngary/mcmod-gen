@@ -1,0 +1,26 @@
+log("&dCosmicPrisons &0 Bot &a by Neel &6 with Python")
+log("&9Code was compiled via &6 compiler.py with Python 2.7")
+log("&9Version:&r&1&l&nLapis Lazuli Levels 30-70")
+%%pickaxecheck.txt%%
+do
+	looks(225,5)
+	#intensity = 20
+	keydown(sneak);
+	%%scanrow.txt%%
+	%%pickaxecheck.txt%%
+	
+	%%antiafk.txt%%
+
+	looks(315,-20)
+	#intensity = 20
+	%%scanrowrev.txt%%	
+	%%pickaxecheck.txt%%
+	%%antiafk.txt%%
+
+	looks(225,-35)
+	#intesity = 16
+	%%scanrow.txt%%
+	%%pickaxecheck.txt%%	
+	%%antiafk.txt%%
+	%%stall.txt%%
+while(1)

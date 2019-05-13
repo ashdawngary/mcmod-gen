@@ -1,0 +1,14 @@
+looks(270,0,500ms)
+looks(+0,-15)
+key(attack)
+looks(+0,+15)
+do
+	%%moveleft.txt%%
+	#c = HITY
+	getid(%HITX%,%#c%,%HITZ%,&p0)
+	if((&p0 == "redstone_ore"))
+		%%breakblock.txt%%	
+	
+	endif
+
+while(ZPOS  <  -249)

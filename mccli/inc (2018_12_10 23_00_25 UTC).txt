@@ -1,0 +1,20 @@
+do
+	if(GETSLOT("skull:3") != -1)	
+		pick("skull:3")
+		key(use)
+	endif
+	if(@#kill ==0)
+		pick("iron_sword")
+		if(%HEALTH%  < 15)
+			key(attack)
+			key(use)
+		else
+			key(attack)
+			
+		endif
+		sleep(50)
+	else
+		pick("bow:0")
+		
+	endif
+while(1)

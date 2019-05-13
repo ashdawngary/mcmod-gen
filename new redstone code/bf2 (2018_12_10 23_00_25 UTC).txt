@@ -1,0 +1,4 @@
+do
+	%%wm.txt%%
+
+while(true)

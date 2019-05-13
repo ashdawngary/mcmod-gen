@@ -1,0 +1,12 @@
+if(@antiafk)
+	look(90,0)
+	log("&6[&lNOAFK&r&6]:&r&cInitating Anti-AFK")
+	keydown(forward)
+	wait(1000ms)
+	keyup(forward)
+	keydown(back)
+	wait(300ms)
+	keyup(back)
+        log("&6[&lNOAFK&r&6]:&r&cResuming Progress")
+	UNSET(@antiafk)
+endif

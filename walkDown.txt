@@ -1,0 +1,7 @@
+#initial = %XPOS%
+keydown(back)
+do
+
+while(%XPOS% == #initial)
+
+keyup(back)

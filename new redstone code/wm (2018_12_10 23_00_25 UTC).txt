@@ -1,0 +1,7 @@
+%%hungercheck.txt%%
+%%lookwestapprox.txt%%
+log("low")
+%%west.scanrow.low.txt%%
+log("hi")
+%%westsimplehigh.txt%%
+%%hungercheck.txt%%

@@ -1,0 +1,5 @@
+do
+	looks(270,90)
+	%%WalkLeft.txt%%
+	%%checkblock.txt%%
+while(ZPOS <6335)

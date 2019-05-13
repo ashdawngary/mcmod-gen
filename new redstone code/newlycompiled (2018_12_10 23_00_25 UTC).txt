@@ -1,0 +1,232 @@
+do
+	#target = 265
+	do
+		   if(@k)
+			      looks(-10,0)
+		   endif
+		   if(@p)
+			      looks(+10,0)
+		   endif
+		   #t = %YAW% - #target
+		   @p = (%YAW% - #target) < 10 
+		   @k = (%YAW% - #target) > -10 )
+	while(@p != @k)
+	looks(90,0,500ms)
+	looks(90,0,500ms)
+	looks(+0,-15)
+	key(attack)
+	looks(+0,+15)
+	if(ZPOS > -249)
+	if(%DIRECTION% == "W")
+		   look(270,0)
+		   keydown(left)
+		   do
+			      keydown(left)    
+		   while(ZPOS < -249)
+		   keyup(left)
+	
+	else
+		   look(90,0)
+		   keydown(right)
+		   do
+			      keydown(right)
+		   while(ZPOS < -249)
+		   keyup(right)
+	endif
+	endif
+	do
+		keydown(left)
+		wait(50ms)
+		keyup(left)
+		#c = HITY
+		DEC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&m1)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p0)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p1)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p2)
+		if((&m1 == "redstone_ore"))
+			wait(50ms)
+			look(+0,+25)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			look(+0,-25)
+		endif	
+		if((&p0 == "redstone_ore"))
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+		
+		endif
+		if((&p1 == "redstone_ore"))
+			wait(100ms)
+			look(+0,-15)
+			wait(100ms)	
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			wait(100ms)
+			look(+0,+15)
+		endif
+		if((p2 == "redstone_ore"))
+				wait(100ms)
+				     	look(+0,-35)
+				     	wait(100ms)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			wait(300ms)
+				     	look(+0,+35)
+		endif
+	while(ZPOS > -263)
+	
+	if((HUNGER < 7))
+		   log("true")
+		   inventorydown(1)
+		   do
+			      key(use)
+		   while(HUNGER < 7)
+		   inventoryup(1)
+	endif
+	#target = 85
+	do
+		   if(@k)
+			      looks(-10,0)
+		   endif
+		   if(@p)
+			      looks(+10,0)
+		   endif
+		   #t = %YAW% - #target
+		   @p = (%YAW% - #target) < 10 
+		   @k = (%YAW% - #target) > -10 )
+	while(@p != @k)
+	looks(270,0,500ms)
+	looks(+0,-15)
+	key(attack)
+	looks(+0,+15)
+	do
+		keydown(left)
+		wait(50ms)
+		keyup(left)
+		#c = HITY
+		DEC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&m1)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p0)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p1)
+		INC(#c,1)
+		getid(%HITX%,%#c%,%HITZ%,&p2)
+		if((&m1 == "redstone_ore"))
+			wait(50ms)
+			look(+0,+25)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			look(+0,-25)
+		endif	
+		if((&p0 == "redstone_ore"))
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+		
+		endif
+		if((&p1 == "redstone_ore"))
+			wait(100ms)
+			look(+0,-15)
+			wait(100ms)	
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			wait(100ms)
+			look(+0,+15)
+		endif
+		if((p2 == "redstone_ore"))
+				wait(100ms)
+				     	look(+0,-35)
+				     	wait(100ms)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				key(attack)
+				if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+					do
+						key(attack)			
+					while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				endif
+			endif
+			wait(300ms)
+				     	look(+0,+35)
+		endif
+	while(ZPOS  <  -249)
+	if((HUNGER < 7))
+		   log("true")
+		   inventorydown(1)
+		   do
+			      key(use)
+		   while(HUNGER < 7)
+		   inventoryup(1)
+	endif
+	
+
+while(true)

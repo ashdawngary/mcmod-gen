@@ -1,0 +1,3 @@
+do
+ %%antiafk.txt%%
+while(@stall_flag == 1)

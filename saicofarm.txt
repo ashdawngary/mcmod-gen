@@ -1,0 +1,102 @@
+log("intialize frame")
+pick("nether_wart")
+
+do
+	log("going right")
+	do
+		looks(270,90)
+		#initial = %ZPOS%
+		keydown(RIGHT)
+		do
+		while(%ZPOS% == #initial)
+		keyup(RIGHT)
+		do
+			key(attack)
+		while(%HITNAME% == "Nether Wart")
+		do
+			key(use)
+		while(%HITNAME% == "Soul Sand")
+	while(ZPOS > 6304)
+	if(%%XPOS%% == 17023)
+		log("Zeroing Position ..."
+		do
+			if(%XPOS% > 16992)
+				keydown(forward)
+			else 
+				keyup(forward)
+			endif
+			if(%ZPOS% < 6335)
+				keydown(left)
+			else
+				keyup(left)
+			endif
+		while( (%XPOS% > 16992) || (%ZPOS% < 6335) )
+		keyup(forward)
+		keyup(left)
+		log("Done!")
+	else
+		#initial = %XPOS%
+		keydown(back)
+		do
+		
+		while(%XPOS% == #initial)
+		
+		keyup(back)
+		do
+			key(attack)
+		while(%HITNAME% == "Nether Wart")
+		do
+			key(use)
+		while(%HITNAME% == "Soul Sand")
+	endif
+	log("going left")
+	do
+		looks(270,90)
+		#initial = %ZPOS%
+		keydown(LEFT)
+		do
+		
+		while(%ZPOS% == #initial)
+		
+		keyup(LEFT)
+		do
+			key(attack)
+		while(%HITNAME% == "Nether Wart")
+		do
+			key(use)
+		while(%HITNAME% == "Soul Sand")
+	while(ZPOS <6335)
+	if(%%XPOS%% == 17023)
+		log("Zeroing Position ..."
+		do
+			if(%XPOS% > 16992)
+				keydown(forward)
+			else 
+				keyup(forward)
+			endif
+			if(%ZPOS% < 6335)
+				keydown(left)
+			else
+				keyup(left)
+			endif
+		while( (%XPOS% > 16992) || (%ZPOS% < 6335) )
+		keyup(forward)
+		keyup(left)
+		log("Done!")
+	else
+		#initial = %XPOS%
+		keydown(back)
+		do
+		
+		while(%XPOS% == #initial)
+		
+		keyup(back)
+		do
+			key(attack)
+		while(%HITNAME% == "Nether Wart")
+		do
+			key(use)
+		while(%HITNAME% == "Soul Sand")
+	endif
+	
+while(1)

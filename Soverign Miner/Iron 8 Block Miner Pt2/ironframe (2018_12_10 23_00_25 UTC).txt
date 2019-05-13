@@ -1,0 +1,12 @@
+looks(60,0)
+// 50 - 140 = 90 / 2 = 18
+do
+	looks(60,0)
+	#iter = 15
+	%%scanrow.txt%%
+	%%antiafk.txt%%
+	looks(+0,-17)
+	#iter = 5
+	%%scanrowrev.txt%%
+	%%antiafk.txt%%
+while(true)

@@ -1,0 +1,18 @@
+if(ZPOS > -249)
+if(%DIRECTION% == "W")
+    look(270,0)
+    keydown(left)
+    do
+        keydown(left)    
+    while(ZPOS < -249)
+    keyup(left)
+
+else
+    look(90,0)
+    keydown(right)
+    do
+        keydown(right)
+    while(ZPOS < -249)
+    keyup(right)
+endif
+endif

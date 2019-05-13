@@ -1,0 +1,5 @@
+for(#iter,0,18)
+	%%breakblock.txt%%
+	look(+5,+0)
+	wait(40ms)
+next

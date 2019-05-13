@@ -1,0 +1,106 @@
+looks(90,0,500ms)
+looks(+0,-15)
+key(attack)
+looks(+0,+15)
+if(ZPOS > -249)
+if(%DIRECTION% == "W")
+	   look(270,0)
+	   keydown(left)
+	   do
+		      keydown(left)    
+	   while(ZPOS < -249)
+	   keyup(left)
+
+else
+	   look(90,0)
+	   keydown(right)
+	   do
+		      keydown(right)
+	   while(ZPOS < -249)
+	   keyup(right)
+endif
+endif
+do
+	keydown(left)
+	wait(50ms)
+	keyup(left)
+	UNSET(p1flag)
+	#c = HITY
+	DEC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&m1)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p0)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p1)
+	INC(#c,1)
+	getid(%HITX%,%#c%,%HITZ%,&p2)
+	if((&m1 == "redstone_ore"))
+		wait(50ms)
+		look(+0,+25)
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			endif
+		endif
+		wait(50ms)
+		look(+0,-25)
+	endif	
+	if((&p0 == "redstone_ore"))
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			endif
+		endif
+	
+	endif
+	if((&p1 == "redstone_ore"))
+		wait(100ms)
+		look(+0,-15)
+		wait(100ms)
+		set(p1flag)	
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			endif
+		endif
+	endif
+	if((&p2 == "redstone_ore"))
+		wait(50ms)
+		look(+0,-10)
+		if(p1setflag)
+		else
+			wait(50ms)
+			look(+0,-15)
+		endif		
+		if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			do
+				key(attack)
+			while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			key(attack)
+			if((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+				do
+					key(attack)			
+				while((%HITID% != "stone") && (%HITID% != "air") && (%HIT% == "TILE") && (%HITID% != "obsidian") && (%HITID% != "prismarine") && (@picklevelup != 1)&& (%HITID% != "quartz_block"))
+			endif
+		endif
+	endif
+	looks(+0,0)
+while(ZPOS > -263)

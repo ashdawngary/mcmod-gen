@@ -1,0 +1,11 @@
+looks(50,0)
+// 50 - 140 = 90 / 2 = 18
+do
+	looks(230,20)
+	#iter = 22
+	%%scanrow.txt%%
+
+	looks(340,0)
+	%%scanrowrev.txt%%
+
+while(true)

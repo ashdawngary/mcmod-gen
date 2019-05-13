@@ -1,0 +1,3 @@
+%%lookeastapprox.txt%%
+looks(90,0,500ms)
+%%east.scanrow.low.txt%%
