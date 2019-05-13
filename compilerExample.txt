@@ -1,0 +1,59 @@
+func main()
+{
+	print << something(5) << endl << "test" << endl;
+	int test = 3;
+	wait(test * 1000);
+	print << getID(0, 0, 0);
+	int test2 = 5;
+}
+
+func something(int num) -> int
+{
+	print << "the number is " << num; //endl doesn't do anything at the end, but does in the middle due to the limitations of log()
+	while(num < 10)
+		num++;
+	return num + 1;
+}
+
+func wait(int ms)
+{
+	native{ //meant to run native functions. Variables should not be created in native, and wrong syntax is up to the user. 
+	//It is dangerous to use native. Used mainly in library functions while creating the language.
+		wait(%!ms!%ms);
+	}
+}
+
+func getID(int x, int y, int z) -> int
+{
+	native returns(int ID){
+		getid(!x!,!y!,!z!,!ID!);
+	}
+	return ID;
+}
+
+/*
+
+compiles to:
+
+#uniqueInt1 = 5;
+log("the number is %#uniqueInt1%");
+log("test");
+if(#uniqueInt1 < 10);
+do;
+inc(num, 1);
+while(#uniqueInt1 < 10);
+endif;
+#uniqueInt2 = #uniqueInt1 + 1;
+log("%#uniqueInt1%")
+log("test");
+#uniqueInt1 = 3; //recycling uniqueInt1 variable as its scope ended.
+#uniqueInt3 = 3 * 1000;
+wait(%#uniqueInt3%ms);
+#uniqueInt3 = 0;
+#uniqueInt4 = 0;
+#uniqueInt5 = 0;
+getid(#uniqueInt3, #uniqueInt4, #uniqueInt5, #uniqueInt16;
+log("%#uniqueInt6%");
+#uniqueInt3 = 5; //all the other uniqueInts(3-6) are out of scope as of now.
+
+*/
