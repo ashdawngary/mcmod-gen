@@ -2,11 +2,9 @@
 # literaly preprocess the code for the mistakes and stuff that we can quick fix.
 #####################
 
-
 def rmvGarbage(line):
     line.lstrip("")
     return line
-
 
 def removeWord(line):
     i = line.find(" ")
@@ -14,8 +12,13 @@ def removeWord(line):
     line.lstrip()
     return line
 
-
 def removeSpaces(line):
     line = line.rstrip()
     line = line.lstrip()
+    return line
+
+def exactParameters(line):
+    start = line.find("(")
+    end = line.rfind(")")
+    line = line[start + 1:end - 1]
     return line
