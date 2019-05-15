@@ -9,7 +9,7 @@ import ProgramEditor
 target_textfile = "compilerExample.txt"
 outfile = "oc.txt"
 if not os.path.exists(target_textfile):
-    print("error could not find file: %s"%(target_textfile)))
+    print("error could not find file: %s"%(target_textfile))
     exit(0)
 
 
@@ -23,20 +23,20 @@ while('' in CODE):
 
 # loaded all the code
 
-editor = ProgramEditor() # create a new program editor
+editor = ProgramEditor.ProgramEditor(CODE) # create a new program editor
 
-lint_scan = ProgramEditor.interpret(CODE)
+lint_scan = ProgramEditor.interpret()
 
 if lint_scan != 0:
-    print "Error your program crashed because %s oops i guess ur done"%(lint_scan)
+    print("Error your program crashed because %s oops i guess ur done"%(lint_scan))
     exit(0)
 outwrite = ProgramEditor.generateProgram(CODE)
 
 if outwrite != 0:
-    print "Error your writer handle crashed %s"%(i)
+    print("Error your writer handle crashed %s"%(outwrite))
     exit(0)
 
-print "generated code. writing out to: %s"%(outfile)
+print("generated code. writing out to: %s"%(outfile))
 
 with open(outfile,'w') as writeHandle:
     writeHandle.write(ProgramEditor.getcode())

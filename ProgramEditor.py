@@ -21,7 +21,7 @@ class ProgramEditor(object):
                     nextLine = nonsensehandling.rmvGarbage(self.lines.pop(0))
                     if nextLine.contains('{'):
                         counter += 1
-                    elif '}' in nextLine:
+                    if '}' in nextLine:
                         counter -= 1
                     if counter > 0:
                         functionBody.append(nextLine)
@@ -71,20 +71,31 @@ class LooseFunction():
     def getName(self):
         return self.name
 
-    def metaLint(self,availibleFunctions,cVariables,):
-        inscopevariables = []
-        while(len(self.body) > 0):
-            pass
 
-    def lint(self, availibleFunctions):
+    def metaLintBoolean(self,line,availibleFunctions,scope):
+
+
+
+
+    def lint(self, availibleFunctions,scope, root = False):
         '''
          tries to make sure that all functions invoked
          are actually listed as availibleFunctions with correct prototypes.
          '''
+        inscopevariables = []
+        self.psuedocode = []
+        while(len(self.body) > 0):
+            nextLine = nonsensehandling.rmvGarbage(self.body.pop(0))
+            if('}' in nextLine):
+                return;
+            elif 'if' in nextLine: # if statement i guess.
+                regexcheck = ')' in nextLine and '(' in nextLine and '{' in nextLine and nextLine.index(')')-nextLine('(') != 1
+                if not regexcheck:
+                    print('failed regex check on line: '+nextLine);
+                    return False
 
 
-
-        self.isLinted = True
+        self.isLinted = self.isLinted or root
 
     def invoke(self, parameters, FreeVariables):
         '''
