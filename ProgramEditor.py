@@ -1,6 +1,14 @@
 import  nonsensehandling
 
-AVAILIBLE = ["#"+chr(i) for i in range(ord('A'),ord('Z'))]
+def cross(set1,set2):
+    newset = []
+    for i in set1:
+        for j in set2:
+            newset.append(i+j)
+    return newset;
+charset = [chr(i) for i in range(ord('A'),ord('Z'))]
+diword = cross(charset,charset)
+AVAILIBLE = cross(["#"],cross(diword,diword))
 
 class ProgramEditor(object):
     """docstring for ProgramEditor."""
@@ -151,7 +159,7 @@ class LooseFunction():
         cLevel = 0
         while len(queue) > 0:
             nextC = queue.pop(0)
-            if nextC in "*-+/" and cLevel == 0:
+            if nextC in "*-+/%" and cLevel == 0:
                 tokens.append(nextC)
                 tokens.append("")
             elif (nextC in ['<','>','=']) and cLevel == 0:
@@ -166,22 +174,24 @@ class LooseFunction():
                     tokens.append('and')
                     tokens.append('')
                     queue = queue[3:]
-                if nextC == 'o' and queue[:2] == ['r',' ']:
+                elif nextC == 'o' and queue[:2] == ['r',' ']:
                     tokens.append('or')
                     tokens.append('')
                     queue = queue[2:]
-                if nextC == '&' and queue[:1] == ['&']:
+                elif nextC == '&' and queue[:1] == ['&']:
                     tokens.append('&&')
                     tokens.append('')
                     queue = queue[1:]
-                if nextC == '|' and queue[:1] == ['|']:
+                elif nextC == '|' and queue[:1] == ['|']:
                     tokens.append('||')
                     tokens.append('')
-                if nextC == '(':
-                    cLevel += 1
-                elif nextC == ')':
-                    cLevel -= 1;
-                tokens[-1] = tokens[-1] + nextC
+                    queue = queue[1:]
+                else:
+                    if nextC == '(':
+                        cLevel += 1
+                    elif nextC == ')':
+                        cLevel -= 1;
+                    tokens[-1] = tokens[-1] + nextC
 
         #print "[>]Need to Evaluate", tokens
         tokens = map(lambda x: x.replace(" ","").replace("\t",""), tokens)
@@ -189,7 +199,7 @@ class LooseFunction():
         codebefore = []
         aggregate = []
         for token in tokens:
-            if token in "*-+/":
+            if token in "*-+/%":
                 aggregate.append(token)
                 continue
             if token in ["<", ">","<=",">=","==","&&","||"]:
