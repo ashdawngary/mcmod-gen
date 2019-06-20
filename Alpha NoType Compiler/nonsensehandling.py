@@ -30,3 +30,16 @@ def exactString(line):
 
 def getFunctionName(line):
     return line[:line.find("(")]
+
+
+def cleanFront(fline):
+    if fline[0] != ' ' or not ' ' in fline:
+        return fline
+
+    startix = 0
+    while startix < len(fline):
+        if (fline[startix] != ' '):
+            return fline[:startix]
+        startix += 1
+    # we should never reach here logic but whatever
+    return fline

@@ -6,7 +6,7 @@ import ProgramEditor
 
 
 
-target_textfile = "testscript.txt"
+target_textfile = "testCompilerExample.txt"
 outfile = "oc.txt"
 if not os.path.exists(target_textfile):
     print("error could not find file: %s"%(target_textfile))
@@ -15,7 +15,7 @@ if not os.path.exists(target_textfile):
 
 CODE = ""
 with open(target_textfile,"r") as fileHandle:
-    CODE = fileHandle.read().replace('\r','').split("\n")
+    CODE = fileHandle.read().replace('\r','').replace('\t','').split("\n")
     fileHandle.close()
 
 while('' in CODE):

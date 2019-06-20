@@ -1,0 +1,34 @@
+func main()
+{
+	cout << something(5)
+	cout << Colors.black <<"test"
+	test = 3
+	wait(test * 1000)
+	cout << getID(0, 0, 0)
+	test2 = 5
+}
+
+func something(num) -> int
+{
+	cout << "the number is " << num
+	while(num < 10){
+	num = num + 1
+	}
+	return num + 1
+}
+
+func wait(ms)
+{
+	native{ 
+		wait(%!ms!%ms);
+	}
+}
+
+func getID(x, y, z) -> int
+{
+	ID = -1
+	native{
+		getid(&!x!,&!y!,&!z!,&!ID!);
+	}
+	return ID
+}

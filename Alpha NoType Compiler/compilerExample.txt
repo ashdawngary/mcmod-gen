@@ -17,15 +17,14 @@ func something(int num) -> int
 
 func wait(int ms)
 {
-	native{ //meant to run native functions. Variables should not be created in native, and wrong syntax is up to the user. 
-	//It is dangerous to use native. Used mainly in library functions while creating the language.
+	native{ 
 		wait(%!ms!%ms);
 	}
 }
 
 func getID(int x, int y, int z) -> int
 {
-	native returns(int ID){
+	native{
 		getid(!x!,!y!,!z!,!ID!);
 	}
 	return ID;

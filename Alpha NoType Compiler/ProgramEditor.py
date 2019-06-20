@@ -31,6 +31,11 @@ class ProgramEditor(object):
                     return # they forgot like alot xd
                 functionBody = []
                 counter = 1 if '{' in nextLine else 0
+                if '{' in self.lines[0] and counter == 0:
+                    counter = 1
+                    self.lines[0] = self.lines[0][self.lines[0].find('{')+1:]
+                    if len(self.lines[0].replace(' ','')) == 0:
+                        self.lines.pop(0)
 
                 while(len(self.lines) > 0):
                     nextLine = nonsensehandling.rmvGarbage(self.lines.pop(0))
@@ -39,7 +44,7 @@ class ProgramEditor(object):
                         counter += 1
                     elif '}' in nextLine:
                         counter -= 1
-                    if counter > 0:
+                    if counter > 0 :
                         functionBody.append(nextLine)
                     if counter == 0:
                         break;
@@ -52,7 +57,8 @@ class ProgramEditor(object):
                 self.value = min(resultingFunction.lint(),self.value)
 
         print("Function Reading done.")
-
+        for func in self.functions.values():
+            print func.getName(),func.parameters,func.returntype
     def interpret(self):
         return self.value
     def generateProgram(self):
@@ -120,7 +126,7 @@ class LooseFunction():
                     queue.append(char)
                 elif char in pairing.values():
                     if len(queue) == 0:
-                        print "Unpaired got a %s with no closing: %s"%(char,reversePairing[char])
+                        self.announceError("Unpaired got a %s with no opening: %s"%(char,reversePairing[char]))
                         return -1
                     if pairing[queue.pop()] != char:
                         print "MisPaired"
@@ -220,7 +226,7 @@ class LooseFunction():
                 for todo_part in todo:
                     if todo_part[0] == '&': # we've got a pointer on the loose.
                         if not todo_part[1:] in cScopeVariables:
-                            self.announceError("invalid base for pointer : ",todopart[1:])
+                            self.announceError("[-]invalid base for pointer : ",todopart[1:])
                         else:
                             newpointer = cScopeVariables[todo_part[1:]]
                     else:
@@ -296,8 +302,20 @@ class LooseFunction():
         copycode = list(self.body)
         returnedHandle = self.queryBoolean(free)
         answer,throw = self.invoke(copycode,currentScope,free,methodHandles,returnHandle=returnHandle, returnedHandle = returnedHandle)
+        #print currentScope,self.parameters
+        for i in currentScope:
+            if not i in self.parameters:
+                free.append(currentScope[i])
 
         return answer
+    def deIntersectFreeMemory(self,oldscope,newScope,freeStack):
+        #compares oldscope to new scope, will relinquish variables if they arent used in the oldscope
+        for variable in newScope:
+            if not variable in oldscope:
+                v = newscope.pop(variable)
+                if not v in oldscope.values():
+                    freestack.append(v)
+
     def handleNativeCode(self,line,code,currentScope):
         ''' returns code,copycode '''
 
@@ -322,9 +340,10 @@ class LooseFunction():
                 nativeCode.append(''.join(revisedPopped))
             else:
                 break
-
         return nativeCode,code
+
     def handleIfStatement(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle=False):
+        scopecopy = dict(currentScope)
         toFree = []
         toWrite = []
 
@@ -368,6 +387,9 @@ class LooseFunction():
 
         elseBlock,potentialReturn = self.invoke(toInvokeOnElse,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
+
+        self.deIntersectFreeMemory(scopecopy,currentScope,free)
+
         return prelimcheckcode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['else']+elseBlock+['endif'],code,isReturnStatement
 
 
@@ -375,6 +397,7 @@ class LooseFunction():
     def handleForLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
         # eval expression is in the form for(onestatement;checkcase;iterate){
         ''' extremely beta rn '''
+        scopecopy = dict(currentScope)
         toFree =[]
         toWrite = []
         booleanCheckVar = self.queryBoolean(free)
@@ -424,6 +447,7 @@ class LooseFunction():
         repeatCheckCode = self.evaluateWithReturnPointer(expressino,booleanCheckVar,currentScope,free,methodHandles)
 
 
+        self.deIntersectFreeMemory(scopecopy,currentScope,free)
 
 
         lastStuff = "while(%s && !%s);"%(booleanCheckVar,returnedHandle)
@@ -434,18 +458,20 @@ class LooseFunction():
     def handleWhileLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
         if returnedHandle == False:
             print "Error! No Returned Handle for While Loop!"
+        scopecopy = dict(currentScope)
 
         toFree =[]
         booleanCheckVar = self.queryBoolean(free)
+        originalexp = str(evalExpression)
         evalExpression = nonsensehandling.exactParameters(evalExpression)
         isReturnStatement = False
         #  evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles)
         prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
         ifstatement = "if (%s && !%s)"%(booleanCheckVar,returnedHandle)
         nextstuff = "do;"
-        clevel = 1 if '{' in evalExpression else 0
+        clevel = 1 if '{' in originalexp else 0
         toInvokeOn =[]
-        while (len(code) > 0 and clevel > 0):
+        while (len(code) > 0 and clevel >= 0):
             popped = code.pop(0)
             if '{' in popped:
                 clevel += 1;
@@ -453,13 +479,13 @@ class LooseFunction():
                 clevel -= 1;
             if clevel != 0:
                 toInvokeOn.append(popped)
-
         beefWhile,potentialReturn = self.invoke(toInvokeOn,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
         repeatCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
 
         lastStuff = "while(%s && !%s);"%(booleanCheckVar,returnedHandle)
 
+        self.deIntersectFreeMemory(scopecopy,currentScope,free)
 
         # dont free that memory otherwise we wil have problemos bc counter / flag corruption
 
@@ -472,7 +498,6 @@ class LooseFunction():
         auxmem = []
         parts = filter(lambda x: len(x.replace(' ','')) > 0, parts)
 
-        print parts
         for sector in parts:
             if '\"' in sector: # treat it as a string
                 sections.append(nonsensehandling.exactString(sector).replace('\"',""))
@@ -480,7 +505,7 @@ class LooseFunction():
                 sector = sector.replace(' ','')
                 if sector.replace(' ','') in cScope:
                     sections.append('%'+cScope[sector.replace(' ','')]+"%")
-                elif 'COLORS.' in sector[:7]:
+                elif 'COLORS.' in sector[:7].upper():
                     RESULT = sector[7:].lower()
                     pairing = {
                         'black': '&0',
@@ -507,6 +532,7 @@ class LooseFunction():
                     else:
                         sections.append(pairing[RESULT])
                 else:
+
                     newvar = self.queryVariable(free)
                     #evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles):
                     precomputecode.extend(self.evaluateWithReturnPointer(sector,newvar,cScope,free,methodHandles))
@@ -534,7 +560,7 @@ class LooseFunction():
         toWrite = []
         endifcount = 0
         while( len(copycode) > 0):
-            line = copycode.pop(0)
+            line = nonsensehandling.cleanFront(copycode.pop(0))
             if line[:3] in ['if ','if(']: # if statement, handle it
                 code,copycode,isReturn = self.handleIfStatement(line[3:],copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
                 toWrite.extend(code)
@@ -568,6 +594,7 @@ class LooseFunction():
                         returnloc = currentScope[left]
                     elif len(free) > 0:
                         returnloc = free.pop(0)
+
                     else:
                         returnloc = self.generateCoolName()
                     currentScope[left] = returnloc
@@ -578,13 +605,9 @@ class LooseFunction():
                 toWrite.append('if (!%s)'%(returnedHandle))
                 endifcount += 1
                 isReturn = not isReturn
-
         free.extend(toFree)
         toWrite.extend(['endif'] * endifcount)
         return toWrite,isReturn
-
-
-
 
 
 #p = LooseFunction("myfunction(a,b,c) -> int","")
