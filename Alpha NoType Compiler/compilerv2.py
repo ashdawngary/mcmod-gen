@@ -6,7 +6,7 @@ import ProgramEditor
 
 
 
-target_textfile = "testCompilerExample.txt"
+target_textfile = raw_input("File: ")
 outfile = "oc.txt"
 if not os.path.exists(target_textfile):
     print("error could not find file: %s"%(target_textfile))

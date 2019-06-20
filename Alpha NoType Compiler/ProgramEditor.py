@@ -6,7 +6,7 @@ def cross(set1,set2):
         for j in set2:
             newset.append(i+j)
     return newset;
-charset = [chr(i) for i in range(ord('A'),ord('Z'))]
+charset = [chr(i) for i in range(ord('a'),ord('z'))]
 diword = cross(charset,charset)
 AVAILIBLE = cross(["#"],cross(diword,diword))
 
@@ -274,7 +274,7 @@ class LooseFunction():
                     self.announceError( "[-]error, no reference to: `%s`\n Line: `%s`\nCurrent Variables: %s"%(token,line,cScopeVariables))
 
         if (rtnptr != None):
-            aggregate = [rtnptr+" ="] + aggregate + ["-- evaluating %s"%(line)]
+            aggregate = [rtnptr+" ="] + aggregate #+ ["-- evaluating %s"%(line)]
 
             codebefore.append(' '.join(aggregate))
         freed.extend(toReliquish)
@@ -310,11 +310,11 @@ class LooseFunction():
         return answer
     def deIntersectFreeMemory(self,oldscope,newScope,freeStack):
         #compares oldscope to new scope, will relinquish variables if they arent used in the oldscope
-        for variable in newScope:
+        for variable in newScope.keys():
             if not variable in oldscope:
-                v = newscope.pop(variable)
+                v = newScope.pop(variable)
                 if not v in oldscope.values():
-                    freestack.append(v)
+                    freeStack.append(v)
 
     def handleNativeCode(self,line,code,currentScope):
         ''' returns code,copycode '''
@@ -400,6 +400,7 @@ class LooseFunction():
         scopecopy = dict(currentScope)
         toFree =[]
         toWrite = []
+        orig = str(evalExpression)
         booleanCheckVar = self.queryBoolean(free)
         evalExpression = nonsensehandling.exactParameters(evalExpression)
         isReturnStatement = False
@@ -415,17 +416,18 @@ class LooseFunction():
         # establish it
         left,right = line.split("=")
         left = left.replace(" ","")
-        iterval = self.queryVariable() if not left in currentScope else currentScope[left]
+        iterval = self.queryVariable(free) if not left in currentScope else currentScope[left]
         currentScope[left] = iterval
         prelimcode = self.evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
 
-        # implement the whole statement itself.
+        # implement the whole statement itself.\
+
         prelimCheckCode = self.evaluateWithReturnPointer(expression,booleanCheckVar,currentScope,free,methodHandles)
-        ifstatement = "if (%s && !%s)"%(booleanCheckVar,returnedHandle)
+        ifstatement = "if(%s && !%s)"%(booleanCheckVar,returnedHandle)
         nextstuff = "do;"
-        clevel = 1 if '{' in evalExpression else 0
+        clevel = 1 if '{' in orig else 0
         toInvokeOn =[]
-        while (len(code) > 0 and clevel > 0):
+        while (len(code) > 0 and clevel >= 0):
             popped = code.pop(0)
             if '{' in popped:
                 clevel += 1;
@@ -433,7 +435,8 @@ class LooseFunction():
                 clevel -= 1;
             if clevel != 0:
                 toInvokeOn.append(popped)
-
+            else:
+                break;
         beefWhile,potentialReturn = self.invoke(toInvokeOn,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
 
@@ -443,16 +446,15 @@ class LooseFunction():
         left = left.replace(" ","")
         iterval = self.announceError("Cannot Create a new variable in incrementor portion\nof for loop.\n%s"%(evalExpression)) if not left in currentScope else currentScope[left]
         currentScope[left] = iterval
-        incrementorcode = evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
-        repeatCheckCode = self.evaluateWithReturnPointer(expressino,booleanCheckVar,currentScope,free,methodHandles)
+        incrementorcode = self.evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
+        repeatCheckCode = self.evaluateWithReturnPointer(expression,booleanCheckVar,currentScope,free,methodHandles)
 
 
         self.deIntersectFreeMemory(scopecopy,currentScope,free)
 
-
         lastStuff = "while(%s && !%s);"%(booleanCheckVar,returnedHandle)
 
-        return prelimcode+[ifstatement,nextstuff]+beefWhile+incrementorcode+laststuff+['endif;'],code,isReturnStatement
+        return prelimcode+prelimCheckCode+[ifstatement,nextstuff]+beefWhile+incrementorcode+repeatCheckCode+[lastStuff,'endif;'],code,isReturnStatement
 
 
     def handleWhileLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
@@ -467,7 +469,7 @@ class LooseFunction():
         isReturnStatement = False
         #  evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles)
         prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
-        ifstatement = "if (%s && !%s)"%(booleanCheckVar,returnedHandle)
+        ifstatement = "if(%s && !%s)"%(booleanCheckVar,returnedHandle)
         nextstuff = "do;"
         clevel = 1 if '{' in originalexp else 0
         toInvokeOn =[]

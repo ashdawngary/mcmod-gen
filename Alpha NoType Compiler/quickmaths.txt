@@ -1,0 +1,16 @@
+func main(){
+
+
+v = 5
+cout << addupTo(&v)
+
+}
+func addupTo(maxval){
+q = 0
+for(cadd = 0; cadd <= maxval;cadd = cadd + 1){
+	q = q + cadd
+}
+
+return q
+
+}
