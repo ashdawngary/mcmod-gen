@@ -288,6 +288,64 @@ class LooseFunction():
         answer,throw = self.invoke(copycode,currentScope,free,methodHandles,returnHandle=returnHandle, returnedHandle = returnedHandle)
 
         return answer
+    def handleForLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
+        # eval expression is in the form for(onestatement;checkcase;iterate){
+        ''' extremely beta rn '''
+        toFree =[]
+        toWrite = []
+        booleanCheckVar = self.queryBoolean(free)
+        evalExpression = nonsensehandling.exactParameters(evalExpression)
+        isReturnStatement = False
+
+        line = ''
+        expression = '1'
+        iter = ''
+
+        try:
+            line,expression,iter = evalExpression.split(';')
+        except:
+            self.announceError('You do not have exactly 3 statements in your for expression\n%s'%(evalExpression))
+        # establish it
+        left,right = line.split("=")
+        left = left.replace(" ","")
+        iterval = self.queryVariable() if not left in currentScope else currentScope[left]
+        currentScope[left] = iterval
+        prelimcode = self.evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
+
+        # implement the whole statement itself.
+        prelimCheckCode = self.evaluateWithReturnPointer(expression,booleanCheckVar,currentScope,free,methodHandles)
+        ifstatement = "if (%s && !%s)"%(booleanCheckVar,returnedHandle)
+        nextstuff = "do;"
+        clevel = 1 if '{' in evalExpression else 0
+        toInvokeOn =[]
+        while (len(code) > 0 and clevel > 0):
+            popped = code.pop(0)
+            if '{' in popped:
+                clevel += 1;
+            elif '}' in popped:
+                clevel -= 1;
+            if clevel != 0:
+                toInvokeOn.append(popped)
+
+        beefWhile,potentialReturn = self.invoke(toInvokeOn,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+        isReturnStatement |= potentialReturn
+
+        #ignore the return bc it litearly will make 0 impact.
+
+        left,right = iter.split("=")
+        left = left.replace(" ","")
+        iterval = self.announceError("Cannot Create a new variable in incrementor portion\nof for loop.\n%s"%(evalExpression)) if not left in currentScope else currentScope[left]
+        currentScope[left] = iterval
+        incrementorcode = evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
+        repeatCheckCode = self.evaluateWithReturnPointer(expressino,booleanCheckVar,currentScope,free,methodHandles)
+
+
+
+
+        lastStuff = "while(%s && !%s);"%(booleanCheckVar,returnedHandle)
+
+        return prelimcode+[ifstatement,nextstuff]+beefWhile+incrementorcode+laststuff+['endif;'],code,isReturnStatement
+
 
     def handleWhileLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
         if returnedHandle == False:
@@ -301,7 +359,7 @@ class LooseFunction():
         prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
         ifstatement = "if (%s && !%s)"%(booleanCheckVar,returnedHandle)
         nextstuff = "do;"
-        clevel = 1
+        clevel = 1 if '{' in evalExpression else 0
         toInvokeOn =[]
         while (len(code) > 0 and clevel > 0):
             popped = code.pop(0)
@@ -323,6 +381,8 @@ class LooseFunction():
 
         return prelimCheckCode+[ifstatement,nextstuff]+beefWhile+repeatCheckCode + [lastStuff,'endif'] ,code,isReturnStatement
 
+    def cout(self,expr,cScope,free,methodHandles):
+        pass
 
     def invoke(self, copycode,currentScope,free, methodHandles,returnHandle=False, returnedHandle = False):
 
