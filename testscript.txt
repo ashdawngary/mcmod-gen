@@ -1,0 +1,27 @@
+def main(){
+
+
+a = 1
+roundvalue = a +13
+d = roundUpTo(a,&roundvalue)
+b = 20
+c = roundUpTo(b,&roundvalue)
+
+diff = b - a
+
+
+
+}
+
+def roundUpTo(x,roundTarget){
+residual = 14-mod(x,roundTarget)
+return x + residual
+
+}
+
+def mod(x,modulus){
+while(x < modulus){
+x = x-modulus
+}
+return x	
+}

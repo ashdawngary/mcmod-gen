@@ -1,0 +1,22 @@
+func main() -> void
+{
+a = 1
+b = 2
+c = a + b + 4 - 1
+d = a-c + b -1
+
+q = fib(a + b - c + d, 0 - c) + fib(a - b + c - d,&d) + fib(b - a + c + d, 5)
+}
+
+func fib(x, ab) -> int
+{
+urx = x * ab
+gib(&urx)
+return urx + 3
+}
+
+func gib(coolint) -> void
+{
+coolint = coolint - 1
+
+}

@@ -20,5 +20,7 @@ def removeSpaces(line):
 def exactParameters(line):
     start = line.find("(")
     end = line.rfind(")")
-    line = line[start + 1:end - 1]
+    line = line[start + 1:end]
     return line
+def getFunctionName(line):
+    return line[:line.find("(")]
