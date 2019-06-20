@@ -579,7 +579,8 @@ class LooseFunction():
                    isReturn = True
                else:
                    isReturn = True
-                   toWrite.extend(self.evaluateWithReturnPointer(line[len('return '):],returnHandle,currentScope,free,methodHandles))
+                   result = self.evaluateWithReturnPointer(line[len('return '):],returnHandle,currentScope,free,methodHandles)
+                   toWrite.extend(result)
                toWrite.append('SET('+returnedHandle+')')
             elif line[:len('cout')+1] == 'cout ':
                 toWrite.extend(self.cout(line[len('cout')+1:], currentScope,free,methodHandles   ) )
@@ -609,6 +610,7 @@ class LooseFunction():
                 isReturn = not isReturn
         free.extend(toFree)
         toWrite.extend(['endif'] * endifcount)
+        print toWrite
         return toWrite,isReturn
 
 
