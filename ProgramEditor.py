@@ -298,6 +298,80 @@ class LooseFunction():
         answer,throw = self.invoke(copycode,currentScope,free,methodHandles,returnHandle=returnHandle, returnedHandle = returnedHandle)
 
         return answer
+    def handleNativeCode(self,line,code,currentScope):
+        ''' returns code,copycode '''
+
+        clevel = 1 if '{' in line else 0
+        nativeCode =[]
+        while (len(code) > 0 and clevel >= 0):
+            popped = code.pop(0)
+            if '{' in popped:
+                clevel += 1;
+            elif '}' in popped:
+                clevel -= 1;
+            if clevel != 0:
+                revisedPopped = []
+                tokens = popped.split('!')
+                for q in tokens:
+                    mp = q.replace(' ','')
+                    if mp in currentScope:
+                        revisedPopped.append(currentScope[mp])
+                    else:
+                        #self.announceError('couldnt find: '+mp)
+                        revisedPopped.append(q)
+                nativeCode.append(''.join(revisedPopped))
+            else:
+                break
+
+        return nativeCode,code
+    def handleIfStatement(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle=False):
+        toFree = []
+        toWrite = []
+
+        booleanCheckVar = self.queryBoolean(free)
+        evalExpression = nonsensehandling.exactParameters(evalExpression)
+        isReturnStatement = False
+        prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
+
+        clevel = 1 if '{' in evalExpression else 0
+        toInvokeOnIf =[]
+        while (len(code) > 0 and clevel >= 0):
+            popped = code.pop(0)
+            if '{' in popped:
+                clevel += 1;
+            elif '}' in popped:
+                clevel -= 1;
+            if clevel != 0:
+                toInvokeOnIf.append(popped)
+            else:
+                break;
+
+        ifBlock,potentialReturn = self.invoke(toInvokeOnIf,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+        isReturnStatement |= potentialReturn
+
+        if len(code) == 0 or not 'else' in code[0]:
+            return prelimcheckcode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['endif'],code,isReturnStatement
+
+
+        clevel = 1 if '{' in code.pop(0) else 0
+        toInvokeOnElse =[]
+        while (len(code) > 0 and clevel >= 0):
+            popped = code.pop(0)
+            if '{' in popped:
+                clevel += 1;
+            elif '}' in popped:
+                clevel -= 1;
+            if clevel != 0:
+                toInvokeOnElse.append(popped)
+            else:
+                break
+
+        elseBlock,potentialReturn = self.invoke(toInvokeOnElse,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+        isReturnStatement |= potentialReturn
+        return prelimcheckcode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['else']+elseBlock+['endif'],code,isReturnStatement
+
+
+
     def handleForLoop(self,evalExpression,code,currentScope,free,methodHandles,returnHandle=False,returnedHandle = False):
         # eval expression is in the form for(onestatement;checkcase;iterate){
         ''' extremely beta rn '''
@@ -392,7 +466,56 @@ class LooseFunction():
         return prelimCheckCode+[ifstatement,nextstuff]+beefWhile+repeatCheckCode + [lastStuff,'endif'] ,code,isReturnStatement
 
     def cout(self,expr,cScope,free,methodHandles):
-        pass
+        parts = expr.split('<<')
+        precomputecode = []
+        sections = []
+        auxmem = []
+        parts = filter(lambda x: len(x.replace(' ','')) > 0, parts)
+
+        print parts
+        for sector in parts:
+            if '\"' in sector: # treat it as a string
+                sections.append(nonsensehandling.exactString(sector).replace('\"',""))
+            else:
+                sector = sector.replace(' ','')
+                if sector.replace(' ','') in cScope:
+                    sections.append('%'+cScope[sector.replace(' ','')]+"%")
+                elif 'COLORS.' in sector[:7]:
+                    RESULT = sector[7:].lower()
+                    pairing = {
+                        'black': '&0',
+                        'dark_blue': '&1',
+                        'dark_green': '&2',
+                        'dark_aqua' : '&3',
+                        'dark_red':   '&4',
+                        'dark_purple': '&5',
+                        'gold': '&6',
+                        'gray': '&7',
+                        'dark_gray': '&8',
+                        'blue': '&9',
+                        'green': '&a',
+                        'aqua': '&b',
+                        'red': '&c',
+                        'light_purple':'&d',
+                        'yellow': '&e',
+                        'white': '&f',
+                        'clear': '&r&f',
+                        'reset': '&r'
+                    }
+                    if not RESULT in pairing:
+                        self.announceError('Unknown color: %s\nChoose from: '%(sector[7:],pairing.keys()))
+                    else:
+                        sections.append(pairing[RESULT])
+                else:
+                    newvar = self.queryVariable(free)
+                    #evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles):
+                    precomputecode.extend(self.evaluateWithReturnPointer(sector,newvar,cScope,free,methodHandles))
+                    sections.append('%'+str(newvar)+"%")
+                    auxmem.append(newvar)
+        free.extend(auxmem)
+        return precomputecode + ['log(\"'+''.join(sections)+'\")']
+
+
 
     def invoke(self, copycode,currentScope,free, methodHandles,returnHandle=False, returnedHandle = False):
 
@@ -412,11 +535,14 @@ class LooseFunction():
         endifcount = 0
         while( len(copycode) > 0):
             line = copycode.pop(0)
-            if line[:3] == 'if ': # if statement, handle it
-                code,copycode,isReturn = self.handleWhileLoop()
-            elif line[:4] == 'for ': # for statement, handle it
-                pass
-            elif line[:len('while')] == 'while':
+            if line[:3] in ['if ','if(']: # if statement, handle it
+                code,copycode,isReturn = self.handleIfStatement(line[3:],copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+                toWrite.extend(code)
+            elif line[:4] in ['for ','for(']: # for statement, handle it
+                code,copycode,isReturn = self.handleForLoop(line,copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+                toWrite.extend(code)
+
+            elif line[:len('while')+1] in ['while ','while(']:
                 code,copycode,isReturn = self.handleWhileLoop(line,copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
                 toWrite.extend(code)
             elif line[:len('return') + 1 ] == 'return ':
@@ -427,6 +553,12 @@ class LooseFunction():
                    isReturn = True
                    toWrite.extend(self.evaluateWithReturnPointer(line[len('return '):],returnHandle,currentScope,free,methodHandles))
                toWrite.append('SET('+returnedHandle+')')
+            elif line[:len('cout')+1] == 'cout ':
+                toWrite.extend(self.cout(line[len('cout')+1:], currentScope,free,methodHandles   ) )
+            elif line[:len('native')+1] in ['native ','native{']:
+                code,copycode = self.handleNativeCode(line,copycode,currentScope)
+                toWrite.extend(code)
+
             else: # assignment based pointer.
                 returnloc = None
                 if '=' in line:

@@ -22,5 +22,11 @@ def exactParameters(line):
     end = line.rfind(")")
     line = line[start + 1:end]
     return line
+def exactString(line):
+    start = line.find("\"")
+    end = line.rfind("\"")
+    line = line[start + 1:end]
+    return line
+
 def getFunctionName(line):
     return line[:line.find("(")]
