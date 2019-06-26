@@ -12,3 +12,7 @@ Programs/ macros in this language were not complete at all.  The syntax for the 
 The syntax of macromod is quite hard to get over and there are weird `%` signs that are sometimes required and sometimes not making the whole thing a mess all around. 
 
 As a aspiring automator, I was looking for a system that would provide me the ability to write powerful  macros that would provide me with competitive advantages in game while still being fully autonomous.  I wanted to press the `F` key and then I would essentially win the game.  
+
+Two current Iterations of Code Generation:
+- Legacy (https://github.com/ashdawngary/mcmod-gen/tree/master/legacy%20compiler)
+- Alpha (https://github.com/ashdawngary/mcmod-gen/tree/master/Alpha%20NoType%20Compiler)
