@@ -58,6 +58,6 @@ There is only 1 function: `force_compile(filename,fle = False,tabtype = '\t')` w
 `fle` is `False` if you want to return a string program to `python -i` or an outputfile if not of type `bool`  
 `tabtype` is the character for tabs  
 
-We can run `force_compile('botframe.txt',fle='outputfile.txt',tabtype='\t') and the rest is done.  
+We can run `force_compile('botframe.txt',fle='outputfile.txt',tabtype='\t')` and the rest is done.  
 
 The resst of the syntax is all Mumfrey's macromod so have fun!
