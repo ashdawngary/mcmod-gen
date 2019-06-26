@@ -1,4 +1,4 @@
-#Legacy mcmod-gen
+# Legacy mcmod-gen
 
 This is Legacy mcmod-gen.  There is only 1 important file namely `compiler.py`.   
 Essentially, legacy mcmod gen is just a cut and paste job.  It was written a very long time ago, and was only meant to simulate void no input functions i.e action only code.  
@@ -14,7 +14,7 @@ Here is the code for those videos: https://github.com/ashdawngary/mcmod-gen/tree
 
 If you are really well-versed in mcmod-gen and are just looking for a cut paste void procedure compiler, then this is your best bet.  
 
-#How to use
+## How to use
 
 Legacy is a very simple system.  You pass in an input file, run the compiler with a bunch of helper functions in their own files, and just compile into a new file.  For example, 
 In order to call a void function, we use the `%%` operator and enclose a file within.  
@@ -51,13 +51,13 @@ keyup(left)
 These smaller scripts eventually allow us to build very powerful scripts at the top (i.e. a bot frame)
 
 
-#How to execute given dependencies.   
+## How to execute given dependencies.   
 Run `python -i` or some equivalent such as idle with `compiler.py` which will open up an interactive shell.  
-There is only 1 function: `force_compile(filename,fle = False,tabtype = '\t')` where:  
-`filename` is filename to input
-`fle` is `False` if you want to return a string program to `python -i` or an outputfile if not of type `bool`
-`tabtype` is the character for tabs
+There is only 1 function: `force_compile(filename,fle = False,tabtype = '\t')` where:    
+`filename` is filename to input  
+`fle` is `False` if you want to return a string program to `python -i` or an outputfile if not of type `bool`  
+`tabtype` is the character for tabs  
 
-We can run `force_compile('botframe.txt',fle='outputfile.txt',tabtype='\t') and the rest is done.
+We can run `force_compile('botframe.txt',fle='outputfile.txt',tabtype='\t') and the rest is done.  
 
 The resst of the syntax is all Mumfrey's macromod so have fun!
