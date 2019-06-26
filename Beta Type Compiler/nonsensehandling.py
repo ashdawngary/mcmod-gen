@@ -16,13 +16,7 @@ def removeSpaces(line):
     line = line.rstrip()
     line = line.lstrip()
     return line
-def intersects(a,b):
-    q = a
-    v = b
-    for i in q:
-        if i in v:
-            return True
-    return False
+
 def exactParameters(line):
     start = line.find("(")
     end = line.rfind(")")
@@ -39,15 +33,13 @@ def getFunctionName(line):
 
 
 def cleanFront(fline):
-    if len(fline) == 0:
-        return fline
     if fline[0] != ' ' or not ' ' in fline:
         return fline
 
     startix = 0
     while startix < len(fline):
         if (fline[startix] != ' '):
-            return fline[startix:]
+            return fline[:startix]
         startix += 1
     # we should never reach here logic but whatever
     return fline

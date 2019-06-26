@@ -1,0 +1,149 @@
+func main(){
+        x = 0
+        y = 0
+        z = 0
+        while(0 == 0){
+                native{
+                looks(90,90)
+                }
+                getValidFloorBlock(&x,&z)
+                if ((x != 0-1) && (z != 0-1)){
+                        moveToPoint(&x,&z)
+                        mineBlock()
+                }
+                else{
+                        native{
+                                wait(500ms)
+                        }
+                }
+        }
+
+}
+func mineBlock(){
+        native{
+        key(attack)
+        }
+        while(isMineable() == 1){
+                native{
+                        key(attack)
+                }
+        }
+
+}
+func getDistance(x1,y1,x2,y2){
+        xdelta = (x1 - x2)
+        ydelta = (y1 - y2)
+        return (&xdelta * &xdelta) + (&ydelta * &ydelta)
+}
+
+func getValidFloorBlock(answerx,answerz){
+        planeHeight = 19
+        answerx = 0-1
+        answerz = 0-1
+        currentAnswerDistnace = 100000
+
+        for(zval = 0-320 ; zval >= 0-324 ; zval = zval - 1){
+                for(xval = 0-27 ; xval >= 0-35;xval = xval - 1){
+
+                        if (isValidBlock(&xval,&planeHeight,&zval) == 1){
+                                tdist = 0
+                                cx = 0
+                                cz = 0
+                                getLocation(&cx,&tdist,&cz)
+                                tdist = getDistance(&cx,&cz,&xval,&zval)
+                                if (currentAnswerDistnace > tdist){
+                                        answerx = xval
+                                        answerz = zval
+                                        currentAnswerDistnace = tdist
+                                }
+
+                        }
+                }
+        }
+
+        cout << "best answer was " << currentAnswerDistnace << "away."
+}
+def isMineable(){
+        value = 0
+        native{
+                !value! = (%HITID% == "coal_ore") || (%HITID% == "iron_ore") || (%HITID% == "gold_ore")
+        }
+        return value
+}
+def isValidBlock(x,y,z){
+        value = 0
+        native{
+                GETID(%!x!%,%!y!%,%!z!%,&v)
+                !value! = (&v == "coal_ore") || (&v == "iron_ore") || (&v == "gold_ore")
+        }
+        return value
+}
+def moveToPoint(targetx,targetz){
+        cx = 0
+        cy = 0
+        cz = 0
+        while( (cx != targetx) || (cz != targetz)){
+                getLocation(&cx,&cy,&cz)
+                if(cz  > targetz){
+                        native{
+                                KEYDOWN(left)
+                                KEYUP(right)
+                        }
+                }
+                else{
+                        if (cz < targetz){
+                                native{
+                                KEYDOWN(right)
+                                KEYUP(left)
+
+                                }
+                        }
+                        else{
+                                native{
+                                KEYUP(right)
+                                KEYUP(left)
+                                }
+                        }
+
+                }
+
+                if(cx < targetx){
+                        native{
+                                KEYDOWN(forward)
+                                KEYUP(back)
+                        }
+                }
+                else{
+                        if (cx > targetx){
+                                native{
+                                KEYDOWN(back)
+                                KEYUP(forward)
+
+                                }
+                        }
+                        else{
+                                native{
+                                KEYUP(back)
+                                KEYUP(forward)
+                                }
+                        }
+                }
+        }
+
+        native{
+                KEYUP(right)
+                KEYUP(left)
+                KEYUP(back)
+                KEYUP(forward)
+        }
+
+
+}
+
+func getLocation(x,y,z){
+        native{
+        !x! = %XPOS%
+        !y! = %YPOS%
+        !z! = %ZPOS%
+        }
+}

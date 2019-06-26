@@ -1,0 +1,250 @@
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func lookNorth(){
+        native{
+        looks(0,0,1)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,16,1)
+        }
+}
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}
+func moveNorth(nblocks){
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        native{
+                keydown(forward)
+        }
+        target = cz - nblocks
+        while(target != cz){
+                getLocation(&cx,&cz)
+        }
+        native{
+                keyup(forward)
+        }
+}
+func moveBackNorth(nblocks){
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        native{
+                keydown(back)
+        }
+        target = cz + nblocks
+        while(target != cz){
+                getLocation(&cx,&cz)
+        }
+        native{
+                keyup(back)
+        }
+}
+func dumpSugar(){
+        native{
+        key(use)
+        wait(500ms)
+        GUI("chest")
+        for(#slot,54,89)
+            getslotitem(%#slot%,&value)
+            if(&value == "reeds")
+                slotclick(%#slot%,1,true)
+                wait(100ms)
+            endif
+        next
+        GUI()
+        }
+}
+func tiltUp(){
+        native{
+                looks(+0,-20,1)
+        }
+}
+func tiltDown(){
+
+        native{
+
+                looks(+0,+35,1)
+        }
+}
+func runRowEast(lowerbound,upperbound){
+        lookEast()
+        tiltUp()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        native{
+                keydown(forward)
+        }
+        while(cx < upperbound){
+                native{
+                !cx!=%XPOS%
+                key(attack)
+                }
+        }
+        native{
+                keyup(forward)
+        }
+        lookEast()
+        tiltDown()
+        dumpSugar()
+}
+func runRowWest(lowerbound,upperbound){
+        lookWest()
+        tiltUp()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        native{
+                keydown(forward)
+        }
+        while(cx > lowerbound){
+                native{
+                !cx!=%XPOS%
+                key(attack)
+                }
+        }
+        native{
+                keyup(forward)
+        }
+        lookWest()
+        tiltDown()
+        dumpSugar()
+}
+func handleEast(lb,ub){
+        curx = 0
+        curz = 0
+        getLocation(&curx,&curz)
+        runRowEast(&lb,&ub)
+        lookNorth()
+        moveNorth(2)
+
+}
+func handleWest(lb,ub){
+        runRowWest(&lb,&ub)
+        lookNorth()
+        moveNorth(1)
+
+}
+def isMaxed(x,y,z){
+        mark = 0
+        native{
+                GETID(%!x!%,%!y!%,%!z!%,&v)
+                !mark! = (&v == "reeds")
+        }
+        return mark
+
+}
+func getSugarCaneMaxed(zval,maxVal,ytarget){
+        count = 0
+        for (xv = -56;xv < 69;xv = xv + 1){
+                count = count + isMaxed(&xv,&ytarget,&zval)
+                if (count >= maxVal){
+                        return maxVal
+                }
+        }
+        return count
+}
+func blockToSatisfy(xmaxed,ytarget){
+        a = getSugarCaneMaxed(-18,&xmaxed,&ytarget)
+        b = getSugarCaneMaxed(-20,&xmaxed,&ytarget)
+        c = getSugarCaneMaxed(-21,&xmaxed,&ytarget)
+        d = getSugarCaneMaxed(-23,&xmaxed,&ytarget)
+        e = getSugarCaneMaxed(-24,&xmaxed,&ytarget)
+        q = a + b + c + d + e
+        cout << "Distr: " << a << " " << b << " " << c << " " << d << " " << e
+        target = 5*xmaxed
+
+        while(q < target){
+                native{
+                        wait(5000ms)
+                }
+                native{
+                        keydown(left)
+                        wait(500ms)
+                        keyup(left)
+                        keydown(right)
+                        wait(1000ms)
+                        keyup(right)
+
+                }
+                native{
+                        wait(5000ms)
+                }
+                cout << "recounting"
+                a = getSugarCaneMaxed(-18,&xmaxed,&ytarget)
+                b = getSugarCaneMaxed(-20,&xmaxed,&ytarget)
+                c = getSugarCaneMaxed(-21,&xmaxed,&ytarget)
+                d = getSugarCaneMaxed(-23,&xmaxed,&ytarget)
+                e = getSugarCaneMaxed(-24,&xmaxed,&ytarget)
+                q = a + b + c + d + e
+                cout << "Distr: " << a << " " << b << " " << c << " " << d << " " << e
+                cout << "there are " << q << "stalks existing in the first 5 rows.  Waiting for " << target
+        }
+}
+func main(){
+        lowerbound = 0-56
+        upperbound = 69
+        while(1){
+        blockToSatisfy(100,102)
+        cout << "Blocker checks out"
+        xpos = -1
+        zpos = -1
+        getLocation(&xpos,&zpos)
+        while(zpos >= 0-63){
+                getLocation(&xpos,&zpos)
+                handleEast(lowerbound,upperbound)
+                getLocation(&xpos,&zpos)
+                if (zpos < 0-63){
+                        lookNorth()
+                        moveBackNorth(2);
+                        lookWest()
+                        while(xpos > lowerbound){
+                                getLocation(&xpos,&zpos);
+
+                                native{
+                                keydown(forward)
+                                !cx!=%XPOS%
+                                }
+                        }
+                        native{
+                                keyup(forward)
+                        }
+                        lookNorth()
+                        moveNorth(4)
+                        cout << "did manuversm tripping"
+                }
+                else{
+                        handleWest(lowerbound,upperbound)
+                }
+                getLocation(&xpos,&zpos)
+        }
+        lookSouth()
+        native{
+        keydown(forward)
+        }
+        while(zpos < 0-18){
+                getLocation(&xpos,&zpos)
+        }
+        native{
+                keyup(forward)
+        }
+        lookEast()
+        }
+
+}

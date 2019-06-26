@@ -1,0 +1,660 @@
+func main(){
+        sellRoutine()
+        while(1){
+
+        completeBottom()
+        lookSouth()
+        native{
+        log("Waiting a minute.")
+        wait(50000ms)
+        }
+        sellRoutine()
+        completeTop()
+        lookSouth()
+        native{
+        log("Waiting a minute.")
+        wait(50000ms)
+        }
+        sellRoutine()
+        completeRight()
+        completeLeft()
+        }
+}
+func main1(){
+        openBlackSmith()
+}
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func matchSpawn(){
+        mark = 0
+        native{
+                getslotitem(22,&out)
+                log("value: %&out%")
+                !mark! = &out == "emerald"
+        }
+        return mark
+}
+func matchBlackSmith(){
+        mark = 0
+        native{
+                getslotitem(49,&out)
+                log("value: %&out%")
+                !mark! = &out == "hopper"
+        }
+        return mark
+}
+func gotoSpawn(){
+        openStar()
+
+        native{
+                slotclick(47,1,false)
+                wait(1000ms)
+                GUI()
+        }
+
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        mspassed = 0
+        while((cx < 0-3) || (cx > 2)){
+                mspassed = mspassed + 100
+                getLocation(&cx,&cz)
+                if(mspassed > 5000){
+                        cout << "Seems to be a slipped teleport.  Retrying . . ."
+                        openStar()
+                        native{
+                                slotclick(47,1,false)
+                                wait(1000ms)
+                                GUI()
+                        }
+                        mspassed = 0
+                }
+        }
+}
+func openStar(){
+        native{
+                GUI()
+                slot(9)
+                key(use)
+                GUI("chest")
+                wait(1000ms)
+        }
+        q = matchSpawn()
+        while(q != 1){
+                native{
+                        GUI()
+                        looks(+90,+0,1)
+                        slot(9)
+                        key(use)
+                        GUI("chest")
+                        wait(1000ms)
+                }
+                q = matchSpawn()
+                native{
+                wait(1000ms)
+                }
+
+        }
+        }
+func gotoIsland(){
+        openStar()
+        cout << "On a valid spawn screen."
+        native{
+                slotclick(47,1,false)
+                wait(1000ms)
+                GUI()
+        }
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        mspassed = 0
+        while((cx < 7) || (cx > 9)){
+                mspassed = mspassed + 100
+                getLocation(&cx,&cz)
+                if(mspassed > 5000){
+                        cout << "Seems to be a slipped teleport.  Retrying . . ."
+                        openStar()
+                        native{
+                                slotclick(47,1,false)
+                                wait(1000ms)
+                                GUI()
+                        }
+                        mspassed = 0
+                }
+        }
+
+
+        }
+func openBlackSmith(){
+        native{
+        slot(1)
+        key(use)
+        wait(500ms)
+        GUI('chest')
+        }
+        q = matchBlackSmith()
+        while(q != 1){
+                native{
+                        GUI()
+                        looks(+5,0)
+                        slot(1)
+                        key(use)
+                        wait(500ms)
+                        GUI("chest")
+                }
+                q = matchBlackSmith()
+        }
+        }
+func rightAlign(cnum){
+        tz = (0-17) - 3*cnum
+        xv = 0
+        zv = 0
+        getLocation(&xv,&zv)
+        while(zv != tz){
+                if (zv < tz){
+                        left()
+                }
+                if(zv > tz){
+                        right()
+                }
+                getLocation(&xv,&zv)
+        }
+        clear()
+        }
+func leftAlign(cnum){
+        tz = (0-17) - 3*cnum
+        xv = 0
+        zv = 0
+        getLocation(&xv,&zv)
+        while(zv != tz){
+                if (zv < tz){
+                        right()
+                }
+                if(zv > tz){
+                        left()
+                }
+                getLocation(&xv,&zv)
+        }
+        clear()
+}
+func tiltDown(){
+
+        native{
+
+                looks(+0,+35,1)
+        }
+}
+func gotoRightSell(){
+        gotoMid()
+        lookEast()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        fw()
+
+        while(cx < 73){
+                getLocation(&cx,&cz)
+        }
+        clear()
+        lookWest()
+        tiltDown()
+
+}
+func gotoLeftSell(){
+        gotoMid()
+        lookWest()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        fw()
+
+        while(cx > 0-59){
+                getLocation(&cx,&cz)
+        }
+        clear()
+        lookEast()
+        tiltDown()
+
+}
+
+func sellRoutine(){
+        gotoSpawn()
+
+        native{
+        keydown(forward)
+        do
+
+        while(%ZPOS% > -90)
+        keyup(forward)
+        looks(270,-18,1)
+        keydown(forward)
+        do
+
+        while(%XPOS% > -17)
+        keyup(forward)
+        looks(280,0,1)
+        }
+        openBlackSmith()
+        native{
+        for(#slot,54,89)
+            getslotitem(%#slot%,&value)
+            if(&value == "reeds")
+                slotclick(%#slot%,1,true)
+                wait(100ms)
+            endif
+        next
+        GUI()
+        looks(180,-10,1)
+        }
+        gotoIsland()
+}
+func lookNorth(){
+        native{
+        looks(0,0,1)
+        }
+}
+func fw(){
+        native{
+                keyup(back)
+                keydown(forward)
+        }
+}
+func bw(){
+        native{
+                keyup(forward)
+                keydown(back)
+        }
+}
+func left(){
+        native{
+                keyup(right)
+                keydown(left)
+        }
+}
+func right(){
+        native{
+                keyup(left)
+                keydown(right)
+        }
+}
+func clear(){
+        native{
+                keyup(forward)
+                keyup(back)
+                keyup(left)
+                keyup(right)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,16,1)
+        }
+}
+func gotoMid(){
+        tx = 7
+        tz = 0-10
+        xv = 0
+        zv = 0
+        lookNorth()
+        getLocation(&xv,&zv)
+        fw()
+        while(zv > tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+}
+
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}
+func pointBRow3(){
+        lookNorth()
+        native{
+        looks(0,-63,1)
+        }
+}
+func pointTRow3(){
+        native{
+        looks(0,39,1)
+        }
+}
+func pointBRow4(){
+        lookNorth()
+        native{
+        looks(0,-80,1)
+        }
+}
+func pointBRow2(){
+        lookNorth()
+        native{
+        looks(0,-2,1)
+        }
+}
+
+func pointBRow1(){
+        native{
+        looks(0,73,1)
+        }
+}
+func pointTRow2(){
+        native{
+        looks(0,69,1)
+        }
+}
+
+func pointTRow1(){
+        native{
+        looks(0,76,1)
+        }
+}
+func drop(){
+        tz = -13
+        xv = 0
+        zv = 0
+        getLocation(&xv,&zv)
+        fw()
+        while(zv > tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+}
+func sneakEdge(){
+        tz = -13
+        xv = 0
+        zv = 0
+        native{
+        keydown(sneak)
+        }
+        getLocation(&xv,&zv)
+        fw()
+        while(zv > tz){
+        getLocation(&xv,&zv)
+        }
+
+        clear()
+        native{
+        keyup(sneak)
+        }
+        lookNorth()
+}
+func alignCol(v){
+        tx = -2 + v
+        xv = 0
+        zv = 0
+        getLocation(&xv,&zv)
+        while(xv != tx){
+                if (xv < tx){
+                        right()
+                }
+                if(xv > tx){
+                        left()
+                }
+                getLocation(&xv,&zv)
+        }
+        clear()
+
+}
+func lookRow(rn){
+        if(rn == 0){
+        pointBRow1()
+        return 1
+        }
+        if(rn == 1){
+        pointBRow2()
+        return 1
+        }
+        if(rn == 2){
+        pointBRow3()
+        return 1
+        }
+        if(rn == 3){
+        pointBRow4()
+        return 1
+        }
+}
+func lookRowT(rn){
+        if(rn == 0){
+        pointTRow1()
+        return 1
+        }
+        if(rn == 1){
+        pointTRow2()
+        return 1
+        }
+        if(rn == 2){
+        pointTRow3()
+        return 1
+        }
+}
+func completeLeft(){
+        native{
+                wait(4000ms)
+                slot(1)
+        }
+        cChest = 0
+        cSlot = 0
+        isFull = 0
+        gotoLeftSell()
+        while(cChest < 16){
+                leftAlign(cChest)
+                cout << "Left Collection " << cChest <<" "<<cSlot << " "<< isFull
+                if(isFull){
+                        lookSouth()
+                        sellRoutine()
+                        isFull = 0
+                        gotoLeftSell()
+                }
+                else{
+                        raidIt(&cSlot,&isFull)
+                        if (cSlot == 54){
+                                cout << "next chest"
+                                cChest = cChest + 1
+                                cSlot = 0
+                        }
+                        else{
+                                cSlot = max(0,cSlot - 2)
+                        }
+                }
+
+        }
+        lookSouth()
+        sellRoutine()
+
+}
+func max(a,b){
+        if (a > b){
+                return a
+        }
+        else{
+                return b
+        }
+}
+func completeRight(){
+        native{
+                wait(4000ms)
+                slot(1)
+        }
+        cChest = 0
+        cSlot = 0
+        isFull = 0
+        gotoRightSell()
+        while(cChest < 16){
+                rightAlign(cChest)
+                cout << "Right Collection " << cChest <<" "<<cSlot << " "<< isFull
+                if(isFull){
+                        lookSouth()
+                        sellRoutine()
+                        isFull = 0
+                        gotoRightSell()
+                }
+                else{
+                        raidIt(&cSlot,&isFull)
+                        if (cSlot == 54){
+                                cout << "next chest"
+                                cChest = cChest + 1
+                                cSlot = 0
+                        }
+                        else{
+                                cSlot = max(0,cSlot - 2)
+                        }
+                }
+
+        }
+        lookSouth()
+        sellRoutine()
+
+}
+func completeBottom(){
+        native{
+        wait(4000ms)
+        slot(1)
+        }
+
+        gotoMid()
+        clear()
+        cCol = 0
+        cRow = 0
+
+        alignCol(&cCol)
+        drop()
+        native{
+                wait(1000ms)
+        }
+        isFull = 0
+        cSlot = 0
+        while(cCol < 8){
+                alignCol(cCol)
+                pvp = lookRow(cRow)
+                cout << "Current status " << cCol << " " << cRow << " " << cSlot <<" " <<isFull
+                if(isFull){
+                        lookSouth()
+                        sellRoutine()
+                        isFull = 0
+                        gotoMid()
+                        alignCol(cCol)
+                        drop()
+                        native{
+                                wait(1000ms)
+                        }
+                }
+                else{
+                        raidIt(&cSlot,&isFull)
+                        if (cSlot == 54){
+                                cout << "next chest"
+                                incrementChest(&cCol,&cRow,4)
+                                cSlot = 0
+                        }
+                        else{
+                                cSlot = max(0,cSlot - 2)
+                        }
+                }
+        }
+}
+func completeTop(){
+        native{
+        wait(4000ms)
+        slot(1)
+        }
+
+        gotoMid()
+        clear()
+        cCol = 0
+        cRow = 0
+
+        alignCol(&cCol)
+        sneakEdge()
+        native{
+                wait(1000ms)
+        }
+        isFull = 0
+        cSlot = 0
+        while(cCol < 8){
+                alignCol(cCol)
+                pvp = lookRowT(cRow)
+                cout << "Current status " << cCol << " " << cRow << " " << cSlot <<" " <<isFull
+                if(isFull){
+                        lookSouth()
+                        sellRoutine()
+                        isFull = 0
+                        gotoMid()
+                        alignCol(cCol)
+                        sneakEdge()
+                        native{
+                                wait(1000ms)
+                        }
+                }
+                else{
+                        raidIt(&cSlot,&isFull)
+                        if (cSlot == 54){
+                                cout << "next chest"
+                                incrementChest(&cCol,&cRow,3)
+                                cSlot = 0
+                        }
+                        else{
+                                cSlot = max(0,cSlot - 2)
+                        }
+                }
+        }
+
+}
+func incrementChest(col,row,mex){
+        row = row + 1
+        if (row == mex){
+                row = 0
+                col = col + 1
+        }
+}
+func isLegit(slot){
+        v = 0
+        native{
+                getslotitem(%!slot!%,&value)
+                !v! = &value == "reeds"
+        }
+        return v
+}
+func raidIt(raidprevSlot,isFull){
+        native{
+        key(use)
+        gui("chest")
+        wait(500ms)
+        }
+        while(raidprevSlot <= 53){
+                q = isLegit(raidprevSlot)
+                if (q == 1){
+                        native{
+                        slotclick(%!raidprevSlot!%,1,true)
+                        wait(120ms)
+                        }
+
+                        q = isLegit(raidprevSlot)
+                        if(q == 1){
+                                cout << "Inventory Full."
+                                isFull = 1
+                                native{
+                                GUI()
+                                }
+                                return 0
+
+                        }
+                }
+                raidprevSlot = raidprevSlot + 1
+        }
+        native{
+                GUI()
+        }
+        return 1
+
+
+}

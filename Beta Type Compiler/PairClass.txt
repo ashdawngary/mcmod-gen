@@ -1,0 +1,14 @@
+class Pairclass{
+        static int q
+        int functionpointer;
+
+        func init(int firstmove, int secondmove) -> void{
+                functionpointer = firstmove;
+                q = secondmove;
+        }
+
+        func addPair(PairClass other) -> PairClass{
+                return PairClass(other.functionpointer,other.functionpointer);
+        }
+
+}
