@@ -121,3 +121,8 @@ func waitForApple(){
 }
 ```
 will return `1` if item slot 1 is an apple and `0` if not.  You can see that since we are working with pointers like `&out` (these are macromod pointers), we can't cast it to an integer and need to compute on it within the `native` scope. But once we test our booleans, we can extract the boolean `mark` and return it.
+# Libraries
+A recent addition to the set of operations macromod provides is libraries.  They are super new and will work, but we have alot in store for them.  Libraries provide alot of functions that you would otherwise have to copy/paste.  At the moment in `ProgramEditor.py`, there is a path that links to the `AlphaLib` directory which indicates where libraries reside.  Change that to the correct location, and your program should pick up any libraries within the folder.  
+
+You can use libraries by using the `using` function outside of function scopes. The syntax is `using(libname,local global or url, version or *)`  
+At the moment, we only support `local`.  Global would ideally query this github to check for libraries because people have not pulled recently, and a `url` can allow people to host their own libraries and download them. Since all the libraries downloaded will repopulate local, you can use the library locally once downloaded.  Lastly the `version` parameter only accepts `*` which will look for the `-latest` extension for your library.  Ideally, some programs may want to use legacy versions of libraries, so we will allow versions to exist.
