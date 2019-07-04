@@ -6,8 +6,8 @@ import ProgramEditor
 import nonsensehandling
 
 
-target_textfile = "sellscript.txt"#raw_input("File: ")
-outfile = "C:\\Users\\neelb\\AppData\\Roaming\\.minecraft\\liteconfig\\common\\macros\\place.txt"
+target_textfile = "GenericSugarCaneScript.txt"#raw_input("File: ")
+outfile = "C:\\Users\\neelb\\AppData\\Roaming\\.minecraft\\liteconfig\\common\\macros\\cqmplexBeta.txt"
 if not os.path.exists(target_textfile):
     print("error could not find file: %s"%(target_textfile))
     exit(0)

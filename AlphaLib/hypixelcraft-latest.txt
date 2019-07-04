@@ -1,0 +1,123 @@
+func matchCraft(){
+        mark = 0
+        native{
+                getslotitem(49,&out)
+                !mark! = &out == "barrier"
+        }
+        return mark
+}
+func waitBarrier(){
+        mark = 0
+        native{
+                getslotitem(24,&out)
+                !mark! = &out == "barrier"
+        }
+        return mark
+}
+
+func openCraft(){
+        native{
+        slot(1)
+        key(use)
+        wait(500ms)
+        GUI('chest')
+        }
+        q = matchCraft()
+        while(q != 1){
+                native{
+                        GUI()
+                        looks(+5,+0)
+                        slot(1)
+                        key(use)
+                        wait(500ms)
+                        GUI("chest")
+                }
+                q = matchCraft()
+        }
+}
+func craftESugar(){
+	cSlot = 54
+	in = 0
+        while(matchCraft() == 0){
+                native{
+                        wait(200ms)
+                }
+        }
+	while(cSlot != 0-1){
+		q = searchForReed(&cSlot)
+		if (q != 0-1){
+                        cout << "slotclicking " << q
+			in = in + 1
+			native{
+				slotclick(%!q!%,1,true)
+               			wait(150ms)
+			}
+		}
+		else{
+			return -1
+		}
+                cout << "in is " << in
+		if (in == 5){
+                        native{
+                        wait(300ms)
+                        }
+                        removeOutliers()
+                        while(waitBarrier()== 0){
+                                cout << "waiting for sugarcane"
+                                native{
+                                        slotclick(24,1,true)
+                                        wait(150ms)
+                                }
+                        }
+                        in = 0
+
+		}
+	}
+}
+func isReeded(inputSlot){
+        mark = 0
+        native{
+                getslotitem(%!inputSlot!%,&out)
+                !mark! = &out == "reeds"
+        }
+        return mark
+}
+func removeOutliers(){
+        if (isReeded(21) == 1){
+                cout << "removed extra 21"
+                native{
+                slotclick(21,1,true)
+                        wait(150ms)
+                }
+        }
+        for (cSlot = 28; cSlot <= 30;cSlot = cSlot + 1){
+                if( isReeded(cSlot) == 1){
+                        cout << "removed extra " << cSlot
+                        native{
+                                slotclick(%!cSlot!%,1,true)
+                                wait(150ms)
+                        }
+                }
+        }
+
+}
+func searchForReed(start){
+	ans = -1
+	for(cSlot = start;cSlot < 89;cSlot = cSlot + 1){
+		mark = 0
+		mark2 = 0
+		native{
+			getslotitem(%!cSlot!%,&value,#val)
+			!mark! = &value == "reeds"
+			!mark2! = (#val == 64)
+		}
+		if ((mark + mark2) == 2){
+                        cout << "exited! (noret)"
+			start = cSlot
+			return cSlot
+		}
+
+	}
+	start = 0
+	return -1
+}

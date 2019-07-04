@@ -1,0 +1,40 @@
+func power(x,n){
+	s = 1
+	for (int cp = 0; cp < n;cp = cp + 1){
+		s = s * x
+	}
+	return s
+}
+func min(a,b){
+
+	if (a < b){
+		return a
+	}
+	else{
+		return b
+	}
+}
+def max(a,b){
+
+	if (a < b){
+		return b
+	}
+	else{
+		return a
+	}
+}
+func mod(k,mod){
+	while(k >= mod){
+		 k = k - mod
+	}
+	return k
+}
+func nearestTen(v){
+	mdv = mod(v,10)
+	if (mdv < 5){
+		return v-mdv
+	}	
+	else{
+		return v - mdv + 10
+	}
+}

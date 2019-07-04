@@ -1,0 +1,13 @@
+using(hypixelcraft,local,*)
+func main(){
+        native{
+                key(use)
+                GUI("chest")
+        }
+        cout << "we are in "
+        craftESugar()
+        native{
+                GUI()
+        }
+        cout << "we are good"
+}

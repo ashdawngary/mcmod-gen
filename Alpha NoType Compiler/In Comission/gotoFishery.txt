@@ -1,0 +1,155 @@
+func main(){
+        gotoIsland()
+}
+
+func gotoIsland(){
+        tx = 17
+        tz = 15
+        xv = 0
+        zv = 0
+        lookSouth()
+        getLocation(&xv,&zv)
+        fw()
+        while(zv < tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+        lookEast()
+        fw()
+        while(xv < tx){
+        getLocation(&xv,&zv)
+        }
+        clear()
+        lookSE()
+        fw()
+        tz =  33
+        while(zv < tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+        lookEast()
+        tx = 40
+        fw()
+        while(xv < tx){
+        getLocation(&xv,&zv)
+        }
+        clear()
+
+        left()
+
+        tz = 29
+        getLocation(&xv,&zv)
+        cout << "values: " << zv << " " << tz
+        while(zv > tz){
+        cout << zv << " " << tz
+        getLocation(&xv,&zv)
+        }
+
+        clear()
+
+        tx = 41
+        fw()
+        while(xv < tx){
+        getLocation(&xv,&zv)
+        }
+        clear()
+
+        left()
+        tz =  28
+        while(zv > tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+
+        tx = 45
+        fw()
+        while(xv < tx){
+        getLocation(&xv,&zv)
+        }
+        clear()
+
+        right()
+        tz =  32
+        while(zv < tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+        native{
+        keydown(sneak)
+        keydown(back)
+        wait(500ms)
+        keyup(back)
+        keyup(sneak)
+        }
+        lookWest()
+        native{
+        slot(1)
+        exec("recast.txt","reCAST")
+        }
+
+}
+
+func fw(){
+        native{
+                keyup(back)
+                keydown(forward)
+        }
+}
+func bw(){
+        native{
+                keyup(forward)
+                keydown(back)
+        }
+}
+func left(){
+        native{
+                keyup(right)
+                keydown(left)
+        }
+}
+func right(){
+        native{
+                keyup(left)
+                keydown(right)
+        }
+}
+func clear(){
+        native{
+                keyup(forward)
+                keyup(back)
+                keyup(left)
+                keyup(right)
+        }
+}
+func lookSE(){
+        native{
+                looks(135,0,1)
+        }
+}
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func lookNorth(){
+        native{
+        looks(0,0,1)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,16,1)
+        }
+}
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}

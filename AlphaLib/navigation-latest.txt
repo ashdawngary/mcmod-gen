@@ -1,0 +1,44 @@
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func lookNorth(){
+        native{
+        looks(0,0,1)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,0,1)
+        }
+}
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}
+func getAltitude(y){
+        native{
+        !y! = %YPOS%
+        }
+}
+func tiltUp(){
+        native{
+                looks(+0,-20,1)
+        }
+}
+func tiltDown(){
+
+        native{
+
+                looks(+0,+35,1)
+        }
+}

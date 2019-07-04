@@ -1,0 +1,54 @@
+func fw(){
+        native{
+                keyup(back)
+                keydown(forward)
+        }
+}
+func snk(){
+        native{
+                keydown(sneak)
+        }
+}
+func usnk(){
+        native{
+                keyup(sneak)
+        }
+}
+func noStrafe(){
+        native{
+                keyup(left)
+                keyup(right)
+        }
+}
+func noStride(){
+        native{
+                keyup(back)
+                keyup(forward)
+        }
+}
+func bw(){
+        native{
+                keyup(forward)
+                keydown(back)
+        }
+}
+func left(){
+        native{
+                keyup(right)
+                keydown(left)
+        }
+}
+func right(){
+        native{
+                keyup(left)
+                keydown(right)
+        }
+}
+func clear(){
+        native{
+                keyup(forward)
+                keyup(back)
+                keyup(left)
+                keyup(right)
+        }
+}

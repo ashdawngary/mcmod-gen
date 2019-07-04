@@ -1,0 +1,190 @@
+
+func main(){
+        gTime = 0
+        aafkTime = 0
+        lookSouth()
+        native{
+        looks(-1,+87,2)
+        }
+        q = 0
+        while(1){
+                if (q == 0){
+                        native{
+                                looks(+5,+5)
+                        }
+                        q = 1
+                }
+                else{
+                        native{
+                                looks(-5,-5)
+                        }
+                        q = 0
+                }
+                native{
+                wait(1000ms)
+                }
+
+                tmp = gTime
+                checkForMobs(&gTime,&q)
+                aafkTime = aafkTime + gTime - tmp
+                if (aafkTime > 20 * 1000){
+                        cout << "Anti-nonreg"
+                        proRegister()
+                        aafkTime = 0
+                }
+                if (gTime > 1000 * 60 * 5){
+                        dumpChops()
+                        gTime = 0
+                        lookSouth()
+                        native{
+                        looks(+2,+84,1)
+                        }
+                }
+
+        }
+}
+func proRegister(){
+
+
+}
+func dumpChops(){
+        lookWest()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        fw()
+        while(cx > 21){
+        getLocation(&cx,&cz)
+        }
+        clear()
+        lookNorth()
+        native{
+                key(use)
+                wait(500ms)
+                GUI("chest")
+                for(#slot,54,89)
+                    getslotitem(%#slot%,&value)
+                    if(&value == "porkchop")
+                        slotclick(%#slot%,1,true)
+                        wait(100ms)
+                    endif
+                next
+                GUI()
+        }
+        lookEast()
+        fw()
+        getLocation(&cx,&cz)
+
+        while(cx < 26){
+        getLocation(&cx,&cz)
+
+        }
+        clear()
+
+}
+func isEntity(){
+mark = 0
+native{
+!mark! = %HIT% == "ENTITY"
+}
+return mark
+}
+
+func checkForMobs(cTime,state){
+while(isEntity() == 1){
+        if (state == 0){
+                native{
+                        looks(+5,+5)
+                }
+                state = 1
+        }
+        else{
+                native{
+                        looks(-5,-5)
+                }
+                state = 0
+        }
+        fw()
+        native{
+        key(attack)
+        wait(500ms)
+        }
+        bw()
+        native{
+        wait(500ms)
+        }
+
+        cTime = cTime + 150
+        clear()
+}
+
+
+
+cTime = cTime + 200
+
+
+}
+func fw(){
+        native{
+                keyup(back)
+                keydown(forward)
+        }
+}
+func bw(){
+        native{
+                keyup(forward)
+                keydown(back)
+        }
+}
+func left(){
+        native{
+                keyup(right)
+                keydown(left)
+        }
+}
+func right(){
+        native{
+                keyup(left)
+                keydown(right)
+        }
+}
+func clear(){
+        native{
+                keyup(forward)
+                keyup(back)
+                keyup(left)
+                keyup(right)
+        }
+}
+func lookSE(){
+        native{
+                looks(135,40,1)
+        }
+}
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func lookNorth(){
+        native{
+        looks(0,65,1)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,0,1)
+        }
+}
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}

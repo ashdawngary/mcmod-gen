@@ -1,27 +1,23 @@
 func main(){
-        sellRoutine()
         while(1){
 
-        completeBottom()
-        lookSouth()
-        native{
-        log("Waiting a minute.")
-        wait(50000ms)
-        }
-        sellRoutine()
         completeTop()
-        lookSouth()
+        spawnNoSell()
         native{
         log("Waiting a minute.")
         wait(50000ms)
         }
-        sellRoutine()
+        spawnNoSell()
         completeRight()
+        spawnNoSell()
         completeLeft()
+        spawnNoSell()
+        completeBottom()
+        native{
+        log("Waiting a minute.")
+        wait(50000ms)
+
         }
-}
-func main1(){
-        openBlackSmith()
 }
 func lookWest(){
 
@@ -43,6 +39,50 @@ func matchSpawn(){
         }
         return mark
 }
+func waitNoBarrierCraft(){
+        mark = 0
+        cTime = 0
+        while(mark < 1){
+        native{
+                getslotitem(24,&out)
+                log("value: %&out%")
+                !mark! = &out != "barrier"
+                wait(20ms)
+        }
+        cTime = cTime + 20
+                if(cTime > 50){
+                        cout << "retry"
+                        native{
+                                slotclick(24,1,true)
+                                wait(20ms)
+                        }
+                        cTime = 0
+                }
+        }
+}
+func waitBarrierCraft(){
+        mark = 0
+        cTime = 0
+        while(mark < 1){
+
+        native{
+                getslotitem(24,&out)
+                log("value: %&out%")
+                !mark! = &out == "barrier"
+                wait(20ms)
+        }
+
+        cTime = cTime + 20
+        if(cTime > 50){
+                cout << "retry"
+                native{
+                        slotclick(24,1,true)
+                        wait(220ms)
+                }
+                cTime = 0
+        }
+        }
+}
 func matchBlackSmith(){
         mark = 0
         native{
@@ -52,6 +92,7 @@ func matchBlackSmith(){
         }
         return mark
 }
+
 func gotoSpawn(){
         openStar()
 
@@ -134,6 +175,28 @@ func gotoIsland(){
 
 
         }
+
+func openCraft(){
+        native{
+        slot(1)
+        key(use)
+        wait(500ms)
+        GUI('chest')
+        }
+        q = matchCraft()
+        while(q != 1){
+                native{
+                        GUI()
+                        looks(+5,+0)
+                        slot(1)
+                        key(use)
+                        wait(500ms)
+                        GUI("chest")
+                }
+                q = matchCraft()
+        }
+        }
+
 func openBlackSmith(){
         native{
         slot(1)
@@ -186,6 +249,18 @@ func leftAlign(cnum){
         }
         clear()
 }
+func gotoBack(){
+        native{
+                keydown(sneak)
+                keydown(back)
+                wait(500ms)
+                keyup(back)
+                keydown(forward)
+                wait(250ms)
+                keyup(forward)
+                keyup(sneak)
+        }
+}
 func tiltDown(){
 
         native{
@@ -225,8 +300,120 @@ func gotoLeftSell(){
         tiltDown()
 
 }
+func spawnNoSell(){
+native{
+slot(1)
+}
+bw()
+cx = 0
+cz = 0
+getLocation(&cx,&cz)
+mspassed = 0
+q = 120
+while(( (cx < 7) || (cx > 9) ) || (q > 101) || (q < 99)){
+        getLocation(&cx,&cz)
 
+        native{
+        !q! = %YPOS%
+        }
+        if (q < 40){
+                clear()
+        }
+}
+clear()
+lookNorth()
+}
 func sellRoutine(){
+        native{
+        slot(1)
+        }
+        bw()
+        cx = 0
+        cz = 0
+        getLocation(&cx,&cz)
+        mspassed = 0
+        q = 120
+        while(( (cx < 7) || (cx > 9) ) || (q > 101) || (q < 99)){
+                getLocation(&cx,&cz)
+
+                native{
+                !q! = %YPOS%
+                }
+                if (q < 40){
+                        clear()
+                }
+        }
+        cout << "ready to roll"
+        clear()
+        lookEast()
+        tiltDown()
+        openCraft()
+        for(slot = 0;slot < 34;slot = slot + 5){
+                slot1 = 54 + slot
+                slot2 = 54 + slot + 1
+                slot3 = 54 + slot + 2
+                slot4 = 54 + slot + 3
+                slot5 = 54 + slot + 4
+                cout << "doing: " << slot1 << " " << slot2 << " " << slot3 << " " << slot4 << " " << slot5
+                native{
+                        slotclick(%!slot1!%,0,false)
+                        wait(120ms)
+                        slotclick(11,0,false)
+                        wait(120ms)
+                        slotclick(%!slot2!%,0,false)
+                        wait(120ms)
+                        slotclick(19,0,false)
+                        wait(120ms)
+                        slotclick(%!slot3!%,0,false)
+                        wait(120ms)
+                        slotclick(20,0,false)
+                        wait(120ms)
+                        slotclick(%!slot4!%,0,false)
+                        wait(120ms)
+                        slotclick(21,0,false)
+                        wait(120ms)
+                        slotclick(%!slot5!%,0,false)
+                        wait(120ms)
+                        slotclick(29,0,false)
+                        wait(120ms)
+                }
+                waitNoBarrierCraft()
+                native{
+                        slotclick(24,1,true)
+                        wait(220ms)
+                }
+                waitBarrierCraft()
+        }
+        native{
+        GUI()
+        }
+        lookEast()
+        native{
+        key(use)
+        }
+        dumpSugar()
+        native{
+        GUI()
+        }
+        lookNorth()
+
+}
+func dumpSugar(){
+        native{
+        key(use)
+        wait(500ms)
+        GUI("chest")
+        for(#slot,54,89)
+            getslotitem(%#slot%,&value)
+            if(&value == "sugar")
+                slotclick(%#slot%,1,true)
+                wait(100ms)
+            endif
+        next
+        GUI()
+        }
+}
+func sellRoutineLumber(){
         gotoSpawn()
 
         native{
@@ -333,7 +520,7 @@ func pointTRow3(){
 func pointBRow4(){
         lookNorth()
         native{
-        looks(0,-80,1)
+        looks(0,-77,1)
         }
 }
 func pointBRow2(){
@@ -365,10 +552,17 @@ func drop(){
         zv = 0
         getLocation(&xv,&zv)
         fw()
-        while(zv > tz){
+        yp = 254
+        while((zv > tz) && (yp > 93) || (yp < 89)){
         getLocation(&xv,&zv)
+        native{
+        !yp! = %YPOS%
+        }
         }
         clear()
+        native{
+        wait(500ms)
+        }
 }
 func sneakEdge(){
         tz = -13
@@ -447,11 +641,10 @@ func completeLeft(){
         cSlot = 0
         isFull = 0
         gotoLeftSell()
-        while(cChest < 16){
+        while(cChest < 20){
                 leftAlign(cChest)
                 cout << "Left Collection " << cChest <<" "<<cSlot << " "<< isFull
                 if(isFull){
-                        lookSouth()
                         sellRoutine()
                         isFull = 0
                         gotoLeftSell()
@@ -469,7 +662,6 @@ func completeLeft(){
                 }
 
         }
-        lookSouth()
         sellRoutine()
 
 }
@@ -490,11 +682,10 @@ func completeRight(){
         cSlot = 0
         isFull = 0
         gotoRightSell()
-        while(cChest < 16){
+        while(cChest < 20){
                 rightAlign(cChest)
                 cout << "Right Collection " << cChest <<" "<<cSlot << " "<< isFull
                 if(isFull){
-                        lookSouth()
                         sellRoutine()
                         isFull = 0
                         gotoRightSell()
@@ -512,7 +703,6 @@ func completeRight(){
                 }
 
         }
-        lookSouth()
         sellRoutine()
 
 }
@@ -529,9 +719,9 @@ func completeBottom(){
 
         alignCol(&cCol)
         drop()
-        native{
-                wait(1000ms)
-        }
+
+        gotoBack()
+
         isFull = 0
         cSlot = 0
         while(cCol < 8){
@@ -539,15 +729,12 @@ func completeBottom(){
                 pvp = lookRow(cRow)
                 cout << "Current status " << cCol << " " << cRow << " " << cSlot <<" " <<isFull
                 if(isFull){
-                        lookSouth()
                         sellRoutine()
                         isFull = 0
                         gotoMid()
                         alignCol(cCol)
                         drop()
-                        native{
-                                wait(1000ms)
-                        }
+                        gotoBack()
                 }
                 else{
                         raidIt(&cSlot,&isFull)
@@ -585,7 +772,6 @@ func completeTop(){
                 pvp = lookRowT(cRow)
                 cout << "Current status " << cCol << " " << cRow << " " << cSlot <<" " <<isFull
                 if(isFull){
-                        lookSouth()
                         sellRoutine()
                         isFull = 0
                         gotoMid()

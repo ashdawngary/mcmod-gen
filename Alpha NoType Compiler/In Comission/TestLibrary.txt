@@ -1,0 +1,5 @@
+using(math,local,*)
+
+func main(){
+	cout << "The maximum of 10 and 12 is" << max(10,12)
+}

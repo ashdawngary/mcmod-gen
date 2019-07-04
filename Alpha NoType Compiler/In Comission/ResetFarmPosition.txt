@@ -1,0 +1,110 @@
+func main(){
+        gotoMid()
+        completeStairs()
+        native{
+        slot(1)
+        log("Put your execute statement right here")
+        }
+}
+func gotoMid(){
+        tx = 7
+        tz = 0-10
+        xv = 0
+        zv = 0
+        lookNorth()
+        getLocation(&xv,&zv)
+        fw()
+        while(zv > tz){
+        getLocation(&xv,&zv)
+        }
+        clear()
+}
+func completeStairs(){
+        tx = -9
+        xv = 0
+        zv = 0
+        getLocation(&xv,&zv)
+        while(xv != tx){
+                if (xv < tx){
+                        right()
+                }
+                if(xv > tx){
+                        left()
+                }
+                getLocation(&xv,&zv)
+        }
+        clear()
+        tz = -18
+        fw()
+        while(zv > tz){
+                getLocation(&xv,&zv)
+        }
+        clear()
+        lookWest()
+        fw()
+        while(xv > 0-56){
+                getLocation(&xv,&zv)
+        }
+        clear()
+        lookEast()
+
+}
+func fw(){
+        native{
+                keyup(back)
+                keydown(forward)
+        }
+}
+func bw(){
+        native{
+                keyup(forward)
+                keydown(back)
+        }
+}
+func left(){
+        native{
+                keyup(right)
+                keydown(left)
+        }
+}
+func right(){
+        native{
+                keyup(left)
+                keydown(right)
+        }
+}
+func clear(){
+        native{
+                keyup(forward)
+                keyup(back)
+                keyup(left)
+                keyup(right)
+        }
+}
+func lookWest(){
+
+        native{
+                looks(270,0,1)
+        }
+}
+func lookEast(){
+        native{
+                looks(90,0,1)
+        }
+}
+func lookNorth(){
+        native{
+        looks(0,0,1)
+        }
+}
+func lookSouth(){
+        native{
+        looks(180,16,1)
+        }
+}
+func getLocation(x,z){
+        native{
+        !x! = %XPOS%
+        !z! = %ZPOS%
+        }
+}

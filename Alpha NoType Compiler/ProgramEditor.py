@@ -12,7 +12,7 @@ def cross(set1,set2):
 charset = [chr(i) for i in range(ord('a'),ord('z'))]
 diword = cross(charset,charset)
 AVAILIBLE = cross(["#"],cross(diword,diword))
-
+LOCALLIBRARIES = "C:\\users\\neelb\\Desktop\\mcmod-gen\\AlphaLib\\"
 class ProgramEditor(object):
     """docstring for ProgramEditor."""
 
@@ -23,10 +23,42 @@ class ProgramEditor(object):
         self.value = 0
         #print self.lines
         self.report = dRetF
+        self.collectiveVariables = {} # variables from other libraries.
+        self.isImported = set([])
         while len(self.lines) > 0:
             nextLine = nonsensehandling.rmvGarbage(self.lines.pop(0))
             #print nextLine
-            if nextLine[:4] == 'func' or nextLine[:3] == 'def':
+            if len(nextLine) == 0:
+                continue
+            elif nextLine[0] >= 'A' and nextLine[0] <= 'Z':
+                #global variable
+                collectiveVariables[nextLine.replace(' ','')] = AVAILIBLE.pop(0)
+            elif nextLine[:5] == "using":
+                # need to import a library
+                # in the form using (libname,local/online,version) ex: 'using(hypixelcraft,local,*)'
+                para = nonsensehandling.exactParameters(nextLine).split(",")
+                target_textfile = LOCALLIBRARIES
+                if para[2] == "*":
+                    target_textfile = target_textfile+para[0]+"-latest.txt"
+                else:
+                    target_textfile = target_textfile+para[0]+"-v%s.txt"%(str(para[2]))
+                print "[*]Looking for ",target_textfile
+                with open(target_textfile,"r") as fileHandle:
+                    CODE = fileHandle.read().replace('\r','').replace('\t','').split("\n")
+                    CODE = map(nonsensehandling.cleanFront,CODE)
+                    fileHandle.close()
+                tempeditor = ProgramEditor(CODE)
+                for qPro in tempeditor.functions:
+                    if not qPro in tempeditor.isImported:
+                        print "Importing Function: %s/%s"%(para[0],qPro)
+                        self.functions[qPro] = tempeditor.functions[qPro]
+                        self.isImported.add(qPro)
+                for cVar in tempeditor.collectiveVariables:
+                    print "Importing Variable: %s/%s"%(para[0],qPro)
+                    self.collectiveVariables[cVar] = tempeditor.collectiveVariables[cVar]
+
+
+            elif nextLine[:4] == 'func' or nextLine[:3] == 'def':
                 functionProtoType = nonsensehandling.removeWord(nextLine)
                 if ("{" in functionProtoType):
                     functionProtoType = functionProtoType[:functionProtoType.find('{')] # snip it there.
@@ -56,13 +88,13 @@ class ProgramEditor(object):
                     print "Failed to close a function.  Crashing"
                     return
 
-                resultingFunction = LooseFunction(functionProtoType,functionBody,debugStreamFunction=dRetF)
+                resultingFunction = LooseFunction(functionProtoType,functionBody,self,debugStreamFunction=dRetF)
                 self.functions[resultingFunction.getName()] = resultingFunction
                 self.value = min(resultingFunction.lint(),self.value)
 
-        print("Function Reading done.")
-        for func in self.functions.values():
-            print func.getName(),func.parameters,func.returntype
+        #print("Function Reading done.")
+        #for func in self.functions.values():
+        #    print func.getName(),func.parameters,func.returntype
     def interpret(self):
         self.report({'name':'program-editor','retcode':self.value,'n-methods':len(self.functions.keys())})
         return self.value
@@ -72,12 +104,13 @@ class ProgramEditor(object):
 class LooseFunction():
     """docstring for LooseFunction."""
 
-    def __init__(self, prototype, fullWrite,debugStreamFunction=lambda x:None ):
+    def __init__(self, prototype, fullWrite,programReference,debugStreamFunction=lambda x:None ):
         self.name = "unknown"
         self.parameters =[]
         self.returntype = "unknown"
         self.body = fullWrite
         self.isLinted = False
+        self.programRef = programReference
         self.whiteListedStreams = ["if","else","for","eval","native","while","cout"]
         self.report= debugStreamFunction
         prototype = nonsensehandling.removeSpaces(prototype)
@@ -139,6 +172,7 @@ class LooseFunction():
         self.isLinted = True
         return len(queue) == 0
     def generateCoolName(self):
+        global AVAILIBLE
         return AVAILIBLE.pop(0)
     def extractOuterParameters(self,string):
         params = [""]
@@ -165,6 +199,7 @@ class LooseFunction():
 
         line = nonsensehandling.cleanFront(line)
         self.report({'name':'eval-rptr','variables':cScopeVariables,'freedSize': len(freed),'numF':len(methodHandles.keys())})
+        #print "\"%s\""%(line)
         #print "Interpretting line with return pointer: %s, variables: %s free variables: %s"%(rtnptr,cScopeVariables,freed)
         # returns a handle
         # k(a - q(b)) + c
@@ -316,7 +351,7 @@ class LooseFunction():
         freed.extend(toReliquish)
         return codebefore
     def matchParameters(self,inputParameters):
-        scope = {}
+        scope = dict(self.programRef.collectiveVariables)
         if len(self.parameters) != len(inputParameters):
             self.announceError( "[-][%s]Incorrect Parameter Matching (%s original but passed %s)"%(self.name,len(self.parameters),len(inputParameters)))
             return scope
@@ -339,8 +374,13 @@ class LooseFunction():
         currentScope = self.matchParameters(parameters)
         copycode = list(self.body)
         returnedHandle = self.queryBoolean(free)
+
+
         answer,throw = self.invoke(copycode,currentScope,free,methodHandles,returnHandle=returnHandle, returnedHandle = returnedHandle)
         #print currentScope,self.parameters
+        if(returnHandle in free):
+            print "error!!!! return handle found in freed memory!"
+
         answer.append('UNSET(%s)'%(returnedHandle))
         for i in currentScope:
             if not i in self.parameters:
@@ -353,6 +393,7 @@ class LooseFunction():
             if not variable in oldscope:
                 v = newScope.pop(variable)
                 if not v in oldscope.values():
+                    print "Freed: %s"%(v)
                     freeStack.append(v)
 
     def handleNativeCode(self,line,code,currentScope):
@@ -389,7 +430,9 @@ class LooseFunction():
         toWrite = []
         original = evalExpression
         booleanCheckVar = self.queryBoolean(free)
+        print "pre",evalExpression
         evalExpression = nonsensehandling.exactParameters(evalExpression)
+        print evalExpression
         isReturnStatement = False
         prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
 
@@ -403,13 +446,14 @@ class LooseFunction():
             elif '}' in popped:
                 clevel -= 1;
             #print popped,clevel
-            if clevel != 0:
+            if clevel > 0:
                 toInvokeOnIf.append(popped)
             else:
                 break;
+        print toInvokeOnIf
         ifBlock,potentialReturn = self.invoke(toInvokeOnIf,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
-
+        print potentialReturn,"ifblock result"
         #print "ifcheck",len(code),code[0]
         if len(code) == 0 or not 'else' in code[0]:
             return prelimCheckCode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['endif;'],code,isReturnStatement
@@ -429,7 +473,7 @@ class LooseFunction():
                 break
         elseBlock,potentialReturn = self.invoke(toInvokeOnElse,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
-
+        #print "if statement", potentialReturn
         self.deIntersectFreeMemory(scopecopy,currentScope,free)
 
         return prelimCheckCode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['else']+elseBlock+['endif;'],code,isReturnStatement
@@ -480,11 +524,12 @@ class LooseFunction():
                 toInvokeOn.append(popped)
             else:
                 break;
+        print "for-toinvokeon",toInvokeOn
         beefWhile,potentialReturn = self.invoke(toInvokeOn,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
-
+        print "for loop potential", potentialReturn
         #ignore the return bc it litearly will make 0 impact.
-
+        print "isReturnStatement",isReturnStatement
         left,right = iter.split("=")
         left = left.replace(" ","")
         iterval = self.announceError("Cannot Create a new variable in incrementor portion\nof for loop.\n%s"%(evalExpression)) if not left in currentScope else currentScope[left]
@@ -496,7 +541,6 @@ class LooseFunction():
         self.deIntersectFreeMemory(scopecopy,currentScope,free)
 
         lastStuff = "while(%s && !%s);"%(booleanCheckVar,returnedHandle)
-
         return prelimcode+prelimCheckCode+[ifstatement,nextstuff]+beefWhile+incrementorcode+repeatCheckCode+[lastStuff,'endif;'],code,isReturnStatement
 
 
@@ -609,8 +653,10 @@ class LooseFunction():
         endifcount = 0
         while( len(copycode) > 0):
             line = nonsensehandling.cleanFront(copycode.pop(0))
+            if len(line) == 0:
+                continue
             if line[:3] in ['if ','if(']: # if statement, handle it
-                code,copycode,isReturn = self.handleIfStatement(line[3:],copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
+                code,copycode,isReturn = self.handleIfStatement(line,copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
                 toWrite.extend(code)
             elif line[:4] in ['for ','for(']: # for statement, handle it
                 code,copycode,isReturn = self.handleForLoop(line,copycode,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
@@ -634,7 +680,7 @@ class LooseFunction():
                 code,copycode = self.handleNativeCode(line,copycode,currentScope)
                 toWrite.extend(code)
 
-            else: # assignment based pointer.
+            else: # assignment based pointer
                 returnloc = None
                 if '=' in line:
                     left,right = line.split("=")
@@ -650,13 +696,14 @@ class LooseFunction():
                     toWrite.extend(self.evaluateWithReturnPointer(right,returnloc,currentScope,free,methodHandles))
                 else:
                     toWrite.extend(self.evaluateWithReturnPointer(line,None,currentScope,free,methodHandles))
-            if isReturn and len(copycode) > 0:
-                toWrite.append('if (!%s)'%(returnedHandle))
+            if isReturn:
+                toWrite.append('if(!%s)'%(returnedHandle))
                 endifcount += 1
                 isReturn = not isReturn
         free.extend(toFree)
         toWrite.extend(['endif;'] * endifcount)
-        return toWrite,isReturn
+        #print endifcount > 0
+        return toWrite,endifcount > 0
 
 
 #p = LooseFunction("myfunction(a,b,c) -> int","")

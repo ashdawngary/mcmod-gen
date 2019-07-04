@@ -1,30 +1,6 @@
-func lookWest(){
-
-        native{
-                looks(270,0,1)
-        }
-}
-func lookEast(){
-        native{
-                looks(90,0,1)
-        }
-}
-func lookNorth(){
-        native{
-        looks(0,0,1)
-        }
-}
-func lookSouth(){
-        native{
-        looks(180,16,1)
-        }
-}
-func getLocation(x,z){
-        native{
-        !x! = %XPOS%
-        !z! = %ZPOS%
-        }
-}
+using(navigation,local,*)
+using(hypixelcraft,local,*)
+using(core,local,*)
 func moveNorth(nblocks){
         cx = 0
         cz = 0
@@ -62,7 +38,7 @@ func dumpSugar(){
         GUI("chest")
         for(#slot,54,89)
             getslotitem(%#slot%,&value)
-            if(&value == "reeds")
+            if(&value == "sugar")
                 slotclick(%#slot%,1,true)
                 wait(100ms)
             endif
@@ -70,18 +46,7 @@ func dumpSugar(){
         GUI()
         }
 }
-func tiltUp(){
-        native{
-                looks(+0,-20,1)
-        }
-}
-func tiltDown(){
 
-        native{
-
-                looks(+0,+35,1)
-        }
-}
 func runRowEast(lowerbound,upperbound){
         lookEast()
         tiltUp()
@@ -100,9 +65,28 @@ func runRowEast(lowerbound,upperbound){
         native{
                 keyup(forward)
         }
+        lookCTable()
+        native{
+        key(use)
+        GUI("chest")
+        }
+        craftESugar()
+        native{
+        GUI()
+        }
         lookEast()
         tiltDown()
         dumpSugar()
+}
+func lookCTable(){
+        native{
+                looks(50,30,1)
+        }
+}
+func lookCTableW(){
+        native{
+                looks(220,30,1)
+        }
 }
 func runRowWest(lowerbound,upperbound){
         lookWest()
@@ -121,6 +105,15 @@ func runRowWest(lowerbound,upperbound){
         }
         native{
                 keyup(forward)
+        }
+        lookCTableW()
+        native{
+        key(use)
+        GUI("chest")
+        }
+        craftESugar()
+        native{
+        GUI()
         }
         lookWest()
         tiltDown()
@@ -160,6 +153,26 @@ func getSugarCaneMaxed(zval,maxVal,ytarget){
         }
         return count
 }
+func countField(xmaxed,ytarget){
+        e = getSugarCaneMaxed(-26,&xmaxed,&ytarget)
+        a = getSugarCaneMaxed(-20,&xmaxed,&ytarget)
+        b = getSugarCaneMaxed(-21,&xmaxed,&ytarget)
+        c = getSugarCaneMaxed(-23,&xmaxed,&ytarget)
+        d = getSugarCaneMaxed(-24,&xmaxed,&ytarget)
+        return a + b +c+d+e
+}
+func getBestField(targetMax){
+        cField = -1
+        tarmax =  5*targetMax
+        for(currentY = 102;currentY <= 106;currentY = currentY + 4){
+                res = countField(&targetMax,currentY)
+                if(   res ==  tarmax ){
+                        cField = currentY
+                        return cField
+                }
+        }
+        return cField
+}
 func blockToSatisfy(xmaxed,ytarget){
         a = getSugarCaneMaxed(-18,&xmaxed,&ytarget)
         b = getSugarCaneMaxed(-20,&xmaxed,&ytarget)
@@ -197,20 +210,17 @@ func blockToSatisfy(xmaxed,ytarget){
                 cout << "there are " << q << "stalks existing in the first 5 rows.  Waiting for " << target
         }
 }
-func main(){
-        lowerbound = 0-56
-        upperbound = 69
-        while(1){
-        blockToSatisfy(100,102)
-        cout << "Blocker checks out"
+func runField(lowerbound,upperbound){
         xpos = -1
         zpos = -1
         getLocation(&xpos,&zpos)
-        while(zpos >= 0-63){
+        lookWest()
+        while(zpos >= 0-76){
                 getLocation(&xpos,&zpos)
+                cout << "lb / ub " << lowerbound << " " << upperbound
                 handleEast(lowerbound,upperbound)
                 getLocation(&xpos,&zpos)
-                if (zpos < 0-63){
+                if (zpos < 0-76){
                         lookNorth()
                         moveBackNorth(2);
                         lookWest()
@@ -226,10 +236,11 @@ func main(){
                                 keyup(forward)
                         }
                         lookNorth()
-                        moveNorth(4)
-                        cout << "did manuversm tripping"
+                        moveNorth(2)
+
                 }
                 else{
+                        cout << "running west"
                         handleWest(lowerbound,upperbound)
                 }
                 getLocation(&xpos,&zpos)
@@ -245,6 +256,152 @@ func main(){
                 keyup(forward)
         }
         lookEast()
+
+}
+func gotoEnterStairs(){
+        cz = 0
+        cx = 0
+        tz = -79
+        getLocation(&cx,&cz)
+        while(cz != tz){
+                if(cz < tz){
+                        right()
+                }
+                if (cz > tz){
+                        left()
+                }
+                getLocation(&cx,&cz)
+        }
+        clear()
+}
+func gotoExitStairs(){
+        cz = 0
+        cx = 0
+        tz = -80
+        getLocation(&cx,&cz)
+        while(cz != tz){
+                if(cz < tz){
+                        right()
+                }
+                if (cz > tz){
+                        left()
+                }
+                getLocation(&cx,&cz)
+        }
+        clear()
+}
+func runReverseStairs(){
+        cx = 0
+        cz =0
+        getLocation(&cx,&cz)
+
+        while(cx < 0-52){
+                cout << "cx: " << cx
+                fw()
+                getLocation(&cx,&cz)
+        }
+        noStride()
+        while(cz < 0-79){
+                right()
+                getLocation(&cx,&cz)
+        }
+        noStrafe()
+        while(cx > 0-56 ){
+                bw()
+                getLocation(&cx,&cz)
+        }
+        clear()
+}
+func runForwardStairs(){
+        cx = 0
+        cz =0
+        getLocation(&cx,&cz)
+
+        while(cx < 0-52){
+                cout << "cx: " << cx
+                fw()
+                getLocation(&cx,&cz)
+        }
+        noStride()
+        while(cz > 0-80){
+                left()
+                getLocation(&cx,&cz)
+        }
+        noStrafe()
+        while(cx > 0-56 ){
+                bw()
+                getLocation(&cx,&cz)
+        }
+        clear()
+}
+func gotoLevel(tarY){
+        cy = 0
+        getAltitude(&cy)
+        if(cy == tarY){
+                return -1
+        }
+        while(cy != tarY){
+                if (cy < tarY){
+                        lookEast()
+                        gotoEnterStairs()
+                        runForwardStairs()
+                }
+                else{
+                        lookEast()
+                        gotoExitStairs()
+                        runReverseStairs()
+                }
+                getAltitude(&cy)
+        }
+        return 1
+}
+func resetOp(){
+
+        zpos = 0
+        xpos = 0
+        getLocation(&xpos,&zpos)
+        if (zpos >= (0-18)){
+                return 1
+        }
+        lookSouth()
+        while(zpos < 0-18){
+                fw()
+                getLocation(&xpos,&zpos)
+        }
+        clear()
+        lookEast()
+        return 2
+}
+
+func main(){
+        cout << "start"
+        lowerbound = 0-56
+        upperbound = 69
+        while(1){
+                target_y = getBestField(100)
+
+                if(target_y > 50){
+                        target_y = target_y - 2
+                        cout << "Blocker checks out reports y level of " << target_y
+                        q = gotoLevel(target_y)
+                        resetOp()
+                        runField(&lowerbound,&upperbound)
+                }
+                else{
+                        cout << "denied reported y value of " << target_y
+                        native{
+                        wait(200ms)
+                        }
+                        left()
+                        native{
+                                wait(500ms)
+                        }
+                        right()
+                        native{
+                        wait(2000ms)
+                        }
+                        noStrafe()
+                }
         }
 
 }
