@@ -49,7 +49,7 @@ class ProgramEditor(object):
                     fileHandle.close()
                 tempeditor = ProgramEditor(CODE)
                 for qPro in tempeditor.functions:
-                    if not qPro in tempeditor.isImported:
+                    if True:
                         print "Importing Function: %s/%s"%(para[0],qPro)
                         self.functions[qPro] = tempeditor.functions[qPro]
                         self.isImported.add(qPro)
@@ -81,7 +81,7 @@ class ProgramEditor(object):
                     elif '}' in nextLine:
                         counter -= 1
                     if counter > 0 :
-                        functionBody.append(nextLine)
+                        functionBody.append(nonsensehandling.cleanComments(nextLine))
                     if counter == 0:
                         break;
                 if(counter != 0): # Failed to close the function
@@ -99,7 +99,7 @@ class ProgramEditor(object):
         self.report({'name':'program-editor','retcode':self.value,'n-methods':len(self.functions.keys())})
         return self.value
     def generateProgram(self):
-        code = self.functions['main'].methodinvoke([], [], self.functions)
+        code = self.functions['main|0'].methodinvoke([], [], self.functions)
         return code
 class LooseFunction():
     """docstring for LooseFunction."""
@@ -132,10 +132,20 @@ class LooseFunction():
 
         results = prototype.split('(')
         self.name = nonsensehandling.removeSpaces(results[0])
-        self.parameters = filter(lambda x: len(x) > 0, map(lambda x: x.replace(" ",""),results[1].split(',')))
+        self.allParameters = filter(lambda x: len(x) > 0, map(lambda x: x.replace(" ",""),results[1].split(',')))
+        self.parameters = []
+        self.optParameters = {}
+
+        for param in self.allParameters:
+            if '=' in param:
+                l,r = param.split("=")
+                self.optParameters[l.replace(" ","")] =  r.replace(" ","")
+            else:
+                self.parameters.append(param)
+
 
     def getName(self):
-        return self.name
+        return self.name+"|"+str(len(self.parameters))
 
 
 
@@ -275,12 +285,23 @@ class LooseFunction():
             if '(' in token:
                 newpointer = ""
 
-                todo = self.extractOuterParameters(nonsensehandling.exactParameters(token))
+                todo = map(nonsensehandling.rmvGarbage,self.extractOuterParameters(nonsensehandling.exactParameters(token)))
+                #print todo
                 #print "params",todo
                 parameters = []
 
+                print todo
 
+
+                optional_pointers = []
+
+                isMandatory = True
+                target_opt = ""
                 for todo_part in todo:
+                    isMandatory = True
+                    invokative = todo_part.find('(')
+                    declarative = todo_part.find('=')
+
                     if len(todo_part) == 0:
                         continue
                     elif todo_part[0] == '&' and not nonsensehandling.intersects("*+-/%",todo_part[1:]): # we've got a pointer on the loose.
@@ -288,18 +309,37 @@ class LooseFunction():
                             self.announceError("[-]invalid base for pointer : "+str(todo_part[1:]))
                         else:
                             newpointer = cScopeVariables[todo_part[1:]]
-                    else:
+                    elif (invokative != -1 and '=' in todo_part[:invokative]) or (invokative == -1 and declarative >= 0):
+                        # optional parameter loading . . .
+                        isMandatory = False
+                        target_opt = todo_part[:declarative].replace(" ","")
+
+                        print "detected an optional argument: %s"%(target_opt)
+
                         if len(freed) == 0:
                             #print "[!]oops! we need another pointer.(function input pointer)"
                             newpointer = self.generateCoolName()
                         else:
                             newpointer = freed.pop(0)
+                        evaluationcode = self.evaluateWithReturnPointer(todo_part[declarative+1:],newpointer,cScopeVariables,freed,methodHandles)
+                        codebefore.extend(evaluationcode)
+                    else:
+                        print "registed `%s` as value"%(todo_part)
+                        if len(freed) == 0:
+                            #print "[!]oops! we need another pointer.(function input pointer)"
+                            newpointer = self.generateCoolName()
+                        else:
+                            newpointer = freed.pop(0)
+
                         #print "[*]obtained a pointer for method call ", nonsensehandling.getFunctionName(token), newpointer
                         toReliquish.append(newpointer)
                         v = self.evaluateWithReturnPointer(todo_part,newpointer,cScopeVariables,freed,methodHandles)
                         codebefore.extend(v)
-                    parameters.append(newpointer)
 
+                    if isMandatory:
+                        parameters.append(newpointer)
+                    else:
+                        optional_pointers.append([target_opt,newpointer])
 
 
                 vpointer = ""
@@ -318,12 +358,12 @@ class LooseFunction():
 
                 #codebefore.append("compupte "+targetinvoke+"(%s)"%(','.join(parameters))+ " to contribute to "+ rtnptr+" via "+vpointer )
                 if targetinvoke.replace(' ','') != '':
-                    targetinvoke = nonsensehandling.cleanFront(targetinvoke)
+                    targetinvoke = nonsensehandling.cleanFront(targetinvoke)+"|"+str(len(parameters))
                     if not targetinvoke in methodHandles:
                         self.announceError( '[-]Unable to find func: '+targetinvoke)
 
 
-                    executioncode = methodHandles[targetinvoke].methodinvoke(parameters,freed,methodHandles,returnHandle=vpointer)
+                    executioncode = methodHandles[targetinvoke].methodinvoke(parameters,freed,methodHandles,returnHandle=vpointer, optionalArgs = optional_pointers)
                     codebefore.extend(executioncode)
                     aggregate.append(vpointer)
                 else:
@@ -346,12 +386,12 @@ class LooseFunction():
 
         if (len(aggregate) == 0 or (rtnptr != None and rtnptr != aggregate[-1])):
             aggregate = [rtnptr+" ="] + aggregate #+ ["-- evaluating %s"%(line)]
-
             codebefore.append(' '.join(aggregate))
         freed.extend(toReliquish)
         return codebefore
-    def matchParameters(self,inputParameters):
+    def matchParameters(self,inputParameters,free,methodHandles,optPara,currentCode):
         scope = dict(self.programRef.collectiveVariables)
+
         if len(self.parameters) != len(inputParameters):
             self.announceError( "[-][%s]Incorrect Parameter Matching (%s original but passed %s)"%(self.name,len(self.parameters),len(inputParameters)))
             return scope
@@ -359,6 +399,19 @@ class LooseFunction():
             for i in self.parameters:
                 scope[i] = inputParameters.pop(0)
 
+        for opt in optPara:
+            if not opt[0] in self.optParameters.keys():
+                self.announceError("[-][%s] non-existent optional parameter: ``%s`, tried to assign it a value of %s"%(opt[0], opt[1]))
+            else:
+                scope[opt[0]] = opt[1]
+
+        for key in self.optParameters.keys():
+            if not key in scope:
+                print "compensating for missing opt-params: `%s`"%(key)
+                spareParameterReturnPtr = self.queryVariable(free)
+                ''' evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles): # marped '''
+                scope[key] = spareParameterReturnPtr
+                currentCode.extend(self.evaluateWithReturnPointer(self.optParameters[key],spareParameterReturnPtr,scope,free,methodHandles))
         return scope
     def queryVariable(self,freed):
         if len(freed) == 0:
@@ -368,10 +421,10 @@ class LooseFunction():
     def queryBoolean(self,freed):
         return self.queryVariable(freed).replace('#','') # cast it back into a boolean/flag from int/counter
 
-    def methodinvoke(self,parameters,free,methodHandles,returnHandle=False):
+    def methodinvoke(self,parameters,free,methodHandles,returnHandle=False, optionalArgs = []):
         self.report({'name':'method-invoke','n-para':len(parameters),'hasReturnHandle':0 if returnHandle == False else 1})
-
-        currentScope = self.matchParameters(parameters)
+        preasset = []
+        currentScope = self.matchParameters(parameters,free,methodHandles,optionalArgs,preasset)
         copycode = list(self.body)
         returnedHandle = self.queryBoolean(free)
 
@@ -382,11 +435,18 @@ class LooseFunction():
             print "error!!!! return handle found in freed memory!"
 
         answer.append('UNSET(%s)'%(returnedHandle))
-        for i in currentScope:
-            if not i in self.parameters:
-                free.append(currentScope[i])
+        safe = []
+        for p in self.allParameters:
+            if type(p) == str:
+                safe.append(p)
+            elif type(p) == list:
+                safe.append(p[0])
 
-        return answer
+        for i in currentScope:
+            if not i in safe:
+                free.append(currentScope[i])
+        return preasset + answer
+
     def deIntersectFreeMemory(self,oldscope,newScope,freeStack):
         #compares oldscope to new scope, will relinquish variables if they arent used in the oldscope
         for variable in newScope.keys():
@@ -682,18 +742,45 @@ class LooseFunction():
 
             else: # assignment based pointer
                 returnloc = None
-                if '=' in line:
-                    left,right = line.split("=")
-                    left = left.replace(" ","")
-                    if left in currentScope:
-                        returnloc = currentScope[left]
-                    elif len(free) > 0:
-                        returnloc = free.pop(0)
 
-                    else:
-                        returnloc = self.generateCoolName()
-                    currentScope[left] = returnloc
-                    toWrite.extend(self.evaluateWithReturnPointer(right,returnloc,currentScope,free,methodHandles))
+                callingidx = line.find('(')
+
+                assignmentBased = '=' in line[:callingidx]
+
+                if assignmentBased:
+                    leadingops = ["+","-","*","/"]
+                    foundOp = False
+                    for op in leadingops:
+                        if (op + "=") in line:
+                            newop = op + "="
+                            left,right = line.split(newop)
+                            left = left.replace(" ","")
+                            right = "%s %s (%s)"%(left,op,right)
+
+                            if left in currentScope:
+                                returnloc = currentScope[left]
+                            elif len(free) > 0:
+                                returnloc = free.pop(0)
+
+                            else:
+                                returnloc = self.generateCoolName()
+                            currentScope[left] = returnloc
+                            toWrite.extend(self.evaluateWithReturnPointer(right,returnloc,currentScope,free,methodHandles))
+                            foundOp = True
+                    if not foundOp:
+
+                        left,right = line.split("=")
+                        left = left.replace(" ","")
+                        if left in currentScope:
+                            returnloc = currentScope[left]
+                        elif len(free) > 0:
+                            returnloc = free.pop(0)
+
+                        else:
+                            returnloc = self.generateCoolName()
+                        currentScope[left] = returnloc
+                        toWrite.extend(self.evaluateWithReturnPointer(right,returnloc,currentScope,free,methodHandles))
+
                 else:
                     toWrite.extend(self.evaluateWithReturnPointer(line,None,currentScope,free,methodHandles))
             if isReturn:

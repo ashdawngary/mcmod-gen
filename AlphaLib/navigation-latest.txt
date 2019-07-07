@@ -1,5 +1,5 @@
+using(core,local,*)
 func lookWest(){
-
         native{
                 looks(270,0,1)
         }
@@ -19,6 +19,11 @@ func lookSouth(){
         looks(180,0,1)
         }
 }
+func lookDown((){
+        native{
+        looks(0,90,0)
+        }
+}
 func getLocation(x,z){
         native{
         !x! = %XPOS%
@@ -36,9 +41,78 @@ func tiltUp(){
         }
 }
 func tiltDown(){
-
         native{
-
                 looks(+0,+35,1)
         }
+}
+func moveX(x)
+{
+    origx=0
+    origz=0
+    getLocation(&origx, &origz)
+    if(x == 0){
+        return true
+    }
+    if(x < 0) {
+        lookWest()
+        newx = origx + x
+        fw()
+        while(origx > newx) {
+            getLocation(&origx, &origz)
+            cout << origx << " " << newx
+        }
+        clear()
+    }
+    else {
+        lookEast()
+        newx = origx + x
+        fw()
+        while(origx < newx) {
+            getLocation(&origx, &origz)
+            cout << origx << " " << newx
+        }
+        clear()
+    }
+    clear()
+}
+func moveZ(z)
+{
+    origx=0
+    origz=0
+    getLocation(&origx,&origz)
+    if(z == 0){
+        return true
+    }
+    if(z < 0) {
+        lookNorth()
+        newz = origz + z
+        fw()
+        while(origz > newz) {
+            getLocation(&origx, &origz)
+            cout << origz << " " << newz
+        }
+        clear()
+    }
+    else {
+        lookSouth()
+        newz = origz + z
+        fw()
+        while(origz < newz) {
+
+            getLocation(&origx, &origz)
+            cout << origz << " " << newz
+        }
+        clear()
+    }
+    clear()
+}
+func moveTo(targetx,targetz)
+{
+    origx = 0
+    origz = 0
+    getLocation(&origx, &origz)
+    diffx = origx-targetx
+    diffz = origz-targetz
+    moveX(diffx)
+    moveZ(diffZ)
 }

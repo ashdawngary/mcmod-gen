@@ -1,0 +1,4 @@
+using(navigation,local,*)
+func main(){
+        moveX(100)
+}

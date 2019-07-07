@@ -3,8 +3,8 @@
 #####################
 
 def rmvGarbage(line):
-    line.lstrip("")
-    return line
+    return line.lstrip()
+
 
 def removeWord(line):
     i = line.find(" ")
@@ -37,7 +37,11 @@ def exactString(line):
 def getFunctionName(line):
     return line[:line.find("(")]
 
-
+def cleanComments(fline):
+    if '//' in fline:
+        return fline[:fline.find('//')]
+    else:
+        return fline
 def cleanFront(fline):
     if len(fline) == 0:
         return fline

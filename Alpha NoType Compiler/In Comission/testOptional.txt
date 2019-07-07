@@ -1,0 +1,15 @@
+func main(){
+        samplevar = 1 // this is a sample variable
+        // here is another comment!
+        increment(&samplevar,4)
+        increment(&samplevar,optional=10)
+        cout << "samplevar is now " << samplevar
+}
+
+func increment(a,b){
+        a += 2*b
+}
+func increment(var,optional = 12){
+
+        var = var + optional
+}

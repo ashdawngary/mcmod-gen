@@ -1,0 +1,6 @@
+:setTargetOutput "C:\Users\neelb\AppData\Roaming\.minecraft\liteconfig\common\macros\"
+:compile "GenericSugarCaneScript.txt" "farmer.txt"
+:compile "ResetFarmPosition.txt" "resetPos.txt"
+:setTargetOuput "C:\Users\neelb\Desktop\mcmod-gen\AlphaLib\"
+:compile "samplereference.txt" "oc.txt"
+:compile "testOptional.txt" "oc.txt"
