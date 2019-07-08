@@ -1,6 +1,5 @@
 :setTargetInput "C:\Users\neelb\Desktop\mcmod-gen\Alpha NoType Compiler\In Comission\"
 :setTargetOutput "C:\Users\neelb\AppData\Roaming\.minecraft\liteconfig\common\macros\"
-:setLocalLibrary "C:\users\neelb\Desktop\mcmod-gen\AlphaLib\"
 :compile "GenericSugarCaneScript.txt" "farmer.txt"
 :compile "ResetFarmPosition.txt" "resetPos.txt"
 :compile "woodARow.txt" "placeWood.txt"

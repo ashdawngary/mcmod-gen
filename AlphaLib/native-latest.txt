@@ -1,11 +1,33 @@
 func attack(){
-	native{
-		key(attack)
-	}
+    native{
+        key(attack)
+    }
+}
+func use() {
+    native{
+        key(use)
+    }
 }
 func attackWithDelay(x){
-	native{
-		key(attack)
-		wait(!x!ms)
-	}
+    native{
+        key(attack)
+        wait(%!x!%ms)
+    }
+}
+func numSlots() {
+    numSlots = 0
+    native {
+        !numSlots! = CONTAINERSLOTS
+    }
+    return numSlots
+}
+func inventoryUp() {
+    native {
+    inventoryup()
+    }
+}
+func inventoryDown() {
+    native {
+    inventorydown()
+    }
 }

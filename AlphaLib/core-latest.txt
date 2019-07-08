@@ -1,3 +1,6 @@
+func !(bool) {
+    return bool == 0
+}
 func fw(){
         native{
                 keyup(back)
@@ -51,4 +54,23 @@ func clear(){
                 keyup(left)
                 keyup(right)
         }
+}
+func wait(x) {
+    native{
+        wait(%!x!%ms)
+    }
+}
+func holdAttack(time) {
+    i = 0
+    while(i < time){
+        attack()
+        i = i + 1
+    }
+}
+func holdingAir() {
+    check = 0
+    native {
+        !check! = ITEM == "air"
+    }
+    return check
 }

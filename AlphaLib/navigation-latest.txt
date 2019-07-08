@@ -1,27 +1,27 @@
 using(core,local,*)
 func lookWest(){
         native{
-                looks(270,0,1)
+        looks(270,0,%!lookTime!%)
         }
 }
-func lookEast(){
+func lookEast(lookTime = 1){
         native{
-                looks(90,0,1)
+        looks(90,0,%!lookTime!%)
         }
 }
-func lookNorth(){
+func lookNorth(lookTime = 1){
         native{
-        looks(0,0,1)
+        looks(0,0,%!lookTime!%)
         }
 }
-func lookSouth(){
+func lookSouth(lookTime = 1){
         native{
-        looks(180,0,1)
+        looks(180,0,%!lookTime!%)
         }
 }
-func lookDown((){
+func lookDown((lookTime = 1){
         native{
-        looks(0,90,0)
+        looks(0,90,%!lookTime!%)
         }
 }
 func getLocation(x,z){
@@ -35,17 +35,17 @@ func getAltitude(y){
         !y! = %YPOS%
         }
 }
-func tiltUp(){
+func tiltUp(lookTime = 1){
         native{
-                looks(+0,-20,1)
+                looks(+0,-20,%!lookTime!%)
         }
 }
-func tiltDown(){
+func tiltDown(lookTime = 1){
         native{
-                looks(+0,+35,1)
+                looks(+0,+35,%!lookTime!%)
         }
 }
-func moveX(x)
+func moveX(x,lookTime = 1)
 {
     origx=0
     origz=0
@@ -54,65 +54,112 @@ func moveX(x)
         return true
     }
     if(x < 0) {
-        lookWest()
+        lookWest(lookTime=lookTime)
         newx = origx + x
         fw()
         while(origx > newx) {
             getLocation(&origx, &origz)
-            cout << origx << " " << newx
         }
         clear()
     }
     else {
-        lookEast()
+        lookEast(lookTime=lookTime)
         newx = origx + x
         fw()
         while(origx < newx) {
             getLocation(&origx, &origz)
-            cout << origx << " " << newx
         }
         clear()
     }
     clear()
 }
-func moveZ(z)
+func moveZ(z,lookTime = 1)
 {
     origx=0
     origz=0
-    getLocation(&origx,&origz)
+    getLocation(&origx, &origz)
     if(z == 0){
         return true
     }
     if(z < 0) {
-        lookNorth()
+        lookNorth(lookTime=lookTime)
         newz = origz + z
         fw()
         while(origz > newz) {
             getLocation(&origx, &origz)
-            cout << origz << " " << newz
         }
         clear()
     }
     else {
-        lookSouth()
+        lookSouth(lookTime=lookTime)
         newz = origz + z
         fw()
         while(origz < newz) {
-
             getLocation(&origx, &origz)
-            cout << origz << " " << newz
         }
         clear()
     }
     clear()
 }
-func moveTo(targetx,targetz)
+func moveTo(targetx,targetz,lookTime = 1)
 {
     origx = 0
     origz = 0
     getLocation(&origx, &origz)
-    diffx = origx-targetx
-    diffz = origz-targetz
-    moveX(diffx)
-    moveZ(diffZ)
+    diffx = targetx - origx
+    diffz = targetz - origz
+    cout << "orig: " << origx << " " << origz
+    cout << "targets: " << targetx << " " << targetz
+    moveX(diffx,lookTime=lookTime)
+    moveZ(diffz,lookTime=lookTime)
+}
+func moveDownX(x,lookTime = 1) {
+    origx=0
+    origz=0
+    getLocation(&origx, &origz)
+    if(x == 0){
+        return true
+    }
+    if(x < 0) {
+        lookDown(lookTime=lookTime)
+        newx = origx + x
+        left()
+        while(origx > newx) {
+            getLocation(&origx, &origz)
+        }
+    }
+    else {
+        lookDown(lookTime=lookTime)
+        newx = origx + x
+        right()
+        while(origx < newx) {
+            getLocation(&origx, &origz)
+        }
+    }
+    clear()
+}
+func moveDownZ(z,lookTime = 1){
+    origx=0
+    origz=0
+    getLocation(&origx, &origz)
+    if(z == 0){
+        return true
+    }
+    if(z < 0) {
+        lookDown(lookTime=lookTime)
+        newz = origz + z
+        fw()
+        while(origz > newz) {
+            getLocation(&origx, &origz)
+        }
+    }
+    else {
+        lookDown(lookTime=lookTime)
+        newz = origz + z
+        bw()
+        while(origz < newz) {
+            getLocation(&origx, &origz)
+        }
+    }
+    clear()
 }

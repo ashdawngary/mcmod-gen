@@ -45,19 +45,27 @@ def compileFile(target_textfile,outfile):
 
     with open(outfile,'w') as writeHandle:
         writeHandle.write('\n'.join(outwrite))
+
+
 instructions = []
 with open("intent.txt","r") as mk:
     instructions = mk.read().split("\n")
 
 base_dir = ""
+input_dir = ""
 for step in instructions:
     parts = step.split(" ")
     if len(parts) < 2:
         continue
     if parts[0] == ":setTargetOutput":
-        base_dir = parts[1][1:-1]
+        base_dir = ''.join(parts[1:])[1:-1]
+    elif parts[0] == ":setLocalLibrary":
+        #print "set LocalLibraries to", parts[1][1:-1]
+        ProgramEditor.LOCALLIBRARIES = ''.join(parts[1:])[1:-1]
+    elif parts[0] == ":setTargetInput":
+        input_dir = ' '.join(parts[1:])[1:-1]
     elif parts[0] == ":compile":
-        cFile = parts[1][1:-1]
+        cFile = input_dir + parts[1][1:-1]
         target = base_dir+parts[2][1:-1]
         print "[:compile] %s --> %s"%(cFile,target)
         compileFile(cFile,target)

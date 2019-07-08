@@ -130,6 +130,8 @@ class LooseFunction():
             self.name = prototype
             return
 
+
+
         results = prototype.split('(')
         self.name = nonsensehandling.removeSpaces(results[0])
         self.allParameters = filter(lambda x: len(x) > 0, map(lambda x: x.replace(" ",""),results[1].split(',')))
@@ -286,12 +288,8 @@ class LooseFunction():
                 newpointer = ""
 
                 todo = map(nonsensehandling.rmvGarbage,self.extractOuterParameters(nonsensehandling.exactParameters(token)))
-                #print todo
-                #print "params",todo
+
                 parameters = []
-
-                print todo
-
 
                 optional_pointers = []
 
@@ -314,7 +312,6 @@ class LooseFunction():
                         isMandatory = False
                         target_opt = todo_part[:declarative].replace(" ","")
 
-                        print "detected an optional argument: %s"%(target_opt)
 
                         if len(freed) == 0:
                             #print "[!]oops! we need another pointer.(function input pointer)"
@@ -324,14 +321,11 @@ class LooseFunction():
                         evaluationcode = self.evaluateWithReturnPointer(todo_part[declarative+1:],newpointer,cScopeVariables,freed,methodHandles)
                         codebefore.extend(evaluationcode)
                     else:
-                        print "registed `%s` as value"%(todo_part)
                         if len(freed) == 0:
-                            #print "[!]oops! we need another pointer.(function input pointer)"
                             newpointer = self.generateCoolName()
                         else:
                             newpointer = freed.pop(0)
 
-                        #print "[*]obtained a pointer for method call ", nonsensehandling.getFunctionName(token), newpointer
                         toReliquish.append(newpointer)
                         v = self.evaluateWithReturnPointer(todo_part,newpointer,cScopeVariables,freed,methodHandles)
                         codebefore.extend(v)
@@ -346,7 +340,6 @@ class LooseFunction():
                 if len(tokens) == 1:
                     vpointer = rtnptr # checkmate
                 elif len(freed) == 0:
-                    #print "[!]oops! we need another pointer.(function value pointer)"
                     vpointer = self.generateCoolName()
                     toReliquish.append(vpointer)
                 else:
@@ -407,7 +400,6 @@ class LooseFunction():
 
         for key in self.optParameters.keys():
             if not key in scope:
-                print "compensating for missing opt-params: `%s`"%(key)
                 spareParameterReturnPtr = self.queryVariable(free)
                 ''' evaluateWithReturnPointer(self,line, rtnptr , cScopeVariables, freed, methodHandles): # marped '''
                 scope[key] = spareParameterReturnPtr
@@ -490,9 +482,7 @@ class LooseFunction():
         toWrite = []
         original = evalExpression
         booleanCheckVar = self.queryBoolean(free)
-        print "pre",evalExpression
         evalExpression = nonsensehandling.exactParameters(evalExpression)
-        print evalExpression
         isReturnStatement = False
         prelimCheckCode = self.evaluateWithReturnPointer(evalExpression,booleanCheckVar,currentScope,free,methodHandles)
 
@@ -510,11 +500,8 @@ class LooseFunction():
                 toInvokeOnIf.append(popped)
             else:
                 break;
-        print toInvokeOnIf
         ifBlock,potentialReturn = self.invoke(toInvokeOnIf,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
-        print potentialReturn,"ifblock result"
-        #print "ifcheck",len(code),code[0]
         if len(code) == 0 or not 'else' in code[0]:
             return prelimCheckCode+['if(%s && !%s)'%(booleanCheckVar,returnedHandle)]+ifBlock+['endif;'],code,isReturnStatement
 
@@ -584,14 +571,12 @@ class LooseFunction():
                 toInvokeOn.append(popped)
             else:
                 break;
-        print "for-toinvokeon",toInvokeOn
         beefWhile,potentialReturn = self.invoke(toInvokeOn,currentScope,free,methodHandles,returnHandle=returnHandle,returnedHandle=returnedHandle)
         isReturnStatement |= potentialReturn
-        print "for loop potential", potentialReturn
         #ignore the return bc it litearly will make 0 impact.
-        print "isReturnStatement",isReturnStatement
         left,right = iter.split("=")
         left = left.replace(" ","")
+        
         iterval = self.announceError("Cannot Create a new variable in incrementor portion\nof for loop.\n%s"%(evalExpression)) if not left in currentScope else currentScope[left]
         currentScope[left] = iterval
         incrementorcode = self.evaluateWithReturnPointer(right,iterval,currentScope,free,methodHandles)
@@ -692,6 +677,54 @@ class LooseFunction():
                     auxmem.append(newvar)
         free.extend(auxmem)
         return precomputecode + ['log(\"'+''.join(sections)+'\")']
+    def echo(self,expr,cScope,free,methodHandles):
+        parts = expr.split('<<')
+        precomputecode = []
+        sections = []
+        auxmem = []
+        parts = filter(lambda x: len(x.replace(' ','')) > 0, parts)
+
+        for sector in parts:
+            if '\"' in sector: # treat it as a string
+                sections.append(nonsensehandling.exactString(sector).replace('\"',""))
+            else:
+                sector = sector.replace(' ','')
+                if sector.replace(' ','') in cScope:
+                    sections.append('%'+cScope[sector.replace(' ','')]+"%")
+                elif 'COLORS.' in sector[:7].upper():
+                    RESULT = sector[7:].lower()
+                    pairing = {
+                        'black': '&0',
+                        'dark_blue': '&1',
+                        'dark_green': '&2',
+                        'dark_aqua' : '&3',
+                        'dark_red':   '&4',
+                        'dark_purple': '&5',
+                        'gold': '&6',
+                        'gray': '&7',
+                        'dark_gray': '&8',
+                        'blue': '&9',
+                        'green': '&a',
+                        'aqua': '&b',
+                        'red': '&c',
+                        'light_purple':'&d',
+                        'yellow': '&e',
+                        'white': '&f',
+                        'clear': '&r&f',
+                        'reset': '&r'
+                    }
+                    if not RESULT in pairing:
+                        self.announceError('Unknown color: %s\nChoose from: '%(sector[7:],pairing.keys()))
+                    else:
+                        sections.append(pairing[RESULT])
+                else:
+
+                    newvar = self.queryVariable(free)
+                    precomputecode.extend(self.evaluateWithReturnPointer(sector,newvar,cScope,free,methodHandles))
+                    sections.append('%'+str(newvar)+"%")
+                    auxmem.append(newvar)
+        free.extend(auxmem)
+        return precomputecode + ['echo(\"'+''.join(sections)+'\")']
 
 
 
@@ -736,6 +769,8 @@ class LooseFunction():
                toWrite.append('SET('+returnedHandle+')')
             elif line[:len('cout')+1] == 'cout ':
                 toWrite.extend(self.cout(line[len('cout')+1:], currentScope,free,methodHandles   ) )
+            elif line[:len('send')+1] in ["send ","echo "]:
+                toWrite.extend(self.echo(line[len('send')+1:], currentScope,free,methodHandles   ) )
             elif line[:len('native')+1] in ['native ','native{']:
                 code,copycode = self.handleNativeCode(line,copycode,currentScope)
                 toWrite.extend(code)

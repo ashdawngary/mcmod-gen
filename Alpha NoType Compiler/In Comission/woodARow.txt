@@ -1,0 +1,103 @@
+using(native,local,*)
+using(navigation,local,*)
+
+func main(){
+        for (q = 0; q < 5; q += 1){
+        loadRow()
+        completeRow()
+        strafeRight(3)
+        }
+
+}
+func loadRow(){
+        fw()
+        zpos = 0
+        xpos = 0
+        targetx = -52
+        getLocation(&xpos,&zpos)
+        while(xpos != targetx){
+                if(xpos < targetx){
+                        bw()
+                }
+                if(xpos > targetx){
+                        fw()
+                }
+                getLocation(&xpos,&zpos)
+        }
+        noStride()
+}
+func strafeRight(x){
+        zpos = 0
+        xpos = 0
+        getLocation(&xpos,&zpos)
+        targetx = zpos-x
+        while(zpos != targetx){
+                if(zpos < targetx){
+                        left()
+                }
+                if(zpos > targetx){
+                        right()
+                }
+                getLocation(&xpos,&zpos)
+        }
+        noStrafe()
+}
+func completeRow(){
+        native{
+                looks(270,0,1)
+                looks(+0,-5)
+        }
+        gotoWood()
+        xp = 0
+        zp = 0
+        getLocation(&xp,&zp)
+        bw()
+        ws = woodInSight()
+        while(xp < 69){
+                cout << "wood in sight " << ws
+                use()
+                if(ws == 0){
+                        fw()
+                        while(ws == 0){
+                                cout << "wood in sght is " << ws
+                                ws = woodInSight()
+                        }
+                        noStride()
+                        bw()
+                }
+                ws = woodInSight()
+                gotoWood()
+                getLocation(&xp,&zp)
+
+
+
+        }
+        noStride()
+        cout << "row done"
+}
+func woodInSight(){
+        mark = 0
+        native{
+                !mark! = %HITID% == "planks"
+                log("check says %HITID%")
+        }
+        return mark
+}
+func gotoWood(){
+        isWood = 0
+        native{
+        IFCONTAINS(%ITEMNAME%,"Plank")
+                !isWood! = 1
+        endif
+        }
+        while(isWood == 0){
+                native{
+                        inventoryUp()
+                }
+                native{
+                IFCONTAINS(%ITEMNAME%,"Plank")
+                        !isWood! = 1
+                endif
+                }
+        }
+}
